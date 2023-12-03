@@ -400,83 +400,68 @@ namespace pxt.editor {
             blocklyPatch: patchBlocks,
         };
 
-        // setTimeout(async () => {
-        //   console.log(`mainthread/ start running`)
-        //   await mainthread()
-        // }, 3000)
 
-        if (location.origin.includes('localhost') == false
+        if (!location.origin.includes('localhost') 
             && location.protocol !== 'https:'
         ) {
             console.warn(`reloading into https context now`);
             location.replace(location.origin.replace('http://', 'https://'))
         }
 
+
+
+
         setTimeout(async () => {
-            console.log('toolchain/ start the makecode brain')
-            // let req
-            // if (location.origin.includes('localhost')) {
-            //   req = await fetch(`${location.origin}/chrome.makecode.js`)
-            // }
-            // else {
-            //   req = await fetch('https://learn.garastem.com/chrome.makecode.js')
-            // }
-            // if (req.status == 200) {
-            //   let js = await req.text()
-            //   eval(js)
-            // }
-            // else {
-            //   console.warn(`toolchain.makecode/ can't be loaded, try local version`)
-            //   const req = await fetch(`${location.origin}/chrome.makecode.js`)
-            // }
-
-            let tag = localStorage.getItem('DEV_MAKECODE')
-            let url;
-            let code;
-            if (tag == null) {
-                console.log("Loading: Public Release, load from Source");
-                url = "https://learn.garastem.com/chrome.makecode.js";
-            }
-            else {
-                // developer
-                url = "https://learn.garastem.com/api/v1/toolchain/makecode";
-                console.log("Loading: Dev version, DEV_MAKECODE is set");
-
-            }
-            let request = await fetch(url);
+            
+            let alternateUrl = localStorage.getItem('gb.alternate_url') || 'chrome.makecode.js'
+            console.log(`toolchain/ start the makecode brain from ${alternateUrl}`)
+            let code
+            let request = await fetch(alternateUrl);
             if (request.status == 200) {
                 code = await request.text()
+                eval(code)
             }
-            else {
-                console.warn(`toolchain.makecode/ can't be loaded, try local cached version`)
-                const req = await fetch(`https://learn.garastem.com/chrome.makecode.js`)
-                code = await req.text()
-            }
-            eval(code)
 
 
-
-
-
-        }, 10)
+        })
         setTimeout(async () => {
-            console.log('toolchain/ start the esptool brain')
-            let req
-            if (location.origin.includes('localhost')) {
-                req = await fetch(`${location.origin}/chrome.esptool.js`)
+            let alternateUrl = localStorage.getItem('gb.alternate_url') || 'chrome.esptool.js'
+            console.log(`toolchain/ start the esptool brain from ${alternateUrl}`)
+            let code
+            let request = await fetch(alternateUrl);
+            if (request.status == 200) {
+                code = await request.text()
+                eval(code)
             }
-            else {
-                req = await fetch('https://learn.garastem.com/chrome.blockly.js')
+
+
+            // console.log('toolchain/ start the esptool brain')
+            // let req
+            // if (location.origin.includes('localhost')) {
+            //     req = await fetch(`${location.origin}/chrome.esptool.js`)
+            // }
+            // else {
+            //     req = await fetch('https://learn.garastem.com/chrome.blockly.js')
+            // }
+            // if (req.status == 200) {
+            //     let js = await req.text()
+            //     eval(js)
+            // }
+            // else {
+            //     console.warn(`toolchain.esptool/ can't be loaded, try local version`)
+            //     const req = await fetch(`${location.origin}/chrome.makecode.js`)
+            // }
+        })
+        setTimeout(async () => {
+            let alternateUrl = localStorage.getItem('gb.alternate_url') || 'chrome.blockly.js'
+            console.log(`toolchain/ start the blockly brain from ${alternateUrl}`)
+            let code
+            let request = await fetch(alternateUrl);
+            if (request.status == 200) {
+                code = await request.text()
+                eval(code)
             }
-            if (req.status == 200) {
-                let js = await req.text()
-                eval(js)
-            }
-            else {
-                console.warn(`toolchain.esptool/ can't be loaded, try local version`)
-                const req = await fetch(`${location.origin}/chrome.makecode.js`)
-            }
-        }, 10)
+        })
 
         return Promise.resolve<pxt.editor.ExtensionResult>(res);
     };
