@@ -1,387 +1,489 @@
 /// <reference path="../node_modules/pxt-core/built/pxteditor.d.ts" />
 
+/*
+  editorToolbar_tsx.setState({
+    textButton: "Press to connect",
+    colorButton: "orange"
+  })
+
+  editorToolbar_tsx.setState({
+    textButton: "Upload to GRobot",
+    colorButton: "black"
+  })
+
+
+  editorToolbar_tsx.setState({
+    textButton: "Upload to G-IoT",
+    colorButton: "pink"
+  })
+
+
+*/
+
+
 namespace pxt.editor {
-    function patchBlocks(pkgTargetVersion: string, dom: Element) {
-        // Perform the following upgrades for sprite event blocks:
-        // - Change variables_get_reporter shadows into argument_reporter_custom shadows for sprite
-        //   event blocks
-        // - Delete variables_get blocks that are connected to a shadow on a sprite event block
-        // - If a variables_get block inside an event handler has the same name as an event handler
-        //   argument name, change the variables_get block to an argument_reporter_custom block
+    if (true) {
+        function patchBlocks(pkgTargetVersion: string, dom: Element) {
+            const allEventNodes = U.toArray(
+                dom.querySelectorAll("block[type=spritesoverlap]")
+            )
+                .concat(U.toArray(dom.querySelectorAll("block[type=spritesoncreated]")))
+                .concat(U.toArray(dom.querySelectorAll("block[type=spritesondestroyed]")))
+                .concat(U.toArray(dom.querySelectorAll("block[type=spritesollisions]")));
 
-        /*
-        Old event blocks (variables_get_reporter):
-
-        <block type="spritesoverlap">
-            <value name="HANDLER_DRAG_PARAM_sprite">
-                <shadow type="variables_get_reporter">
-                    <field name="VAR">sprite</field>
-                </shadow>
-                <block type="variables_get">
-                    <field name="VAR">myVariable</field>
-                </block>
-            </value>
-            ...
-            <value name="HANDLER_DRAG_PARAM_otherSprite">
-                <shadow type="variables_get_reporter">
-                    <field name="VAR">otherSprite</field>
-                </shadow>
-            </value>
-            ...
-            <statement name="HANDLER">
-                <block type="spritesetpos">
-                    <value name="sprite">
-                        <block type="variables_get">
-                            <field name="VAR">myVariable</field>
-                        </block>
-                    </value>
-                    ...
-                </block>
-            </statement>
-        </block>
-
-
-        New event blocks (argument_reporter_custom):
-
-        <block type="spritesoverlap" x="490" y="470">
-            <value name="HANDLER_DRAG_PARAM_sprite">
-                <shadow type="argument_reporter_custom">
-                    <mutation typename="Sprite"></mutation>
-                    <field name="VALUE">sprite</field>
-                </shadow>
-            </value>
-            ...
-            <value name="HANDLER_DRAG_PARAM_otherSprite">
-                <shadow type="argument_reporter_custom">
-                    <mutation typename="Sprite"></mutation>
-                    <field name="VALUE">otherSprite</field>
-                </shadow>
-            </value>
-            ...
-            <statement name="HANDLER">
-                <block type="spritesetpos">
-                    <value name="sprite">
-                        <block type="argument_reporter_custom">
-                            <mutation typename="Sprite"></mutation>
-                            <field name="VALUE">sprite</field>
-                        </block>
-                    </value>
-                    ...
-                </block>
-            </statement>
-        </block>
-        */
-        const allEventNodes = U.toArray(dom.querySelectorAll("block[type=spritesoverlap]"))
-            .concat(U.toArray(dom.querySelectorAll("block[type=spritesoncreated]")))
-            .concat(U.toArray(dom.querySelectorAll("block[type=spritesondestroyed]")))
-            .concat(U.toArray(dom.querySelectorAll("block[type=spritesollisions]")));
-
-        allEventNodes.forEach(node => {
-            // Don't rewrite if already upgraded, i.e. if there are argument_reporter_custom
-            // shadows already present
-            if (node.querySelectorAll("shadow[type=argument_reporter_custom]").length > 0) {
-                return;
-            }
-
-            const paramValues = U.toArray(node.children).filter(child => {
-                return child.tagName == "value" && child.getAttribute("name").indexOf("HANDLER_DRAG_PARAM_") !== -1;
-            });
-            const statementsRoot = node.querySelector("statement[name=HANDLER]");
-            const usedVariables = U.toArray(statementsRoot.querySelectorAll("block[type=variables_get]"));
-
-            paramValues.forEach(value => {
-                let oldVariableName = "";
-                const connectedVarBlock = getChildBlock(value, "variables_get");
-
-                if (connectedVarBlock) {
-                    // A variable is connected to the shadow variable reporter; use the name for
-                    // the argument reporter and delete the variable
-                    const connectedVarField = getField(connectedVarBlock, "VAR");
-                    oldVariableName = connectedVarField.textContent;
-                    value.removeChild(connectedVarBlock);
+            allEventNodes.forEach((node) => {
+                // Don't rewrite if already upgraded, i.e. if there are argument_reporter_custom
+                // shadows already present
+                if (
+                    node.querySelectorAll("shadow[type=argument_reporter_custom]").length >
+                    0
+                ) {
+                    return;
                 }
 
-                const handlerVarShadow = getShadow(value, "variables_get_reporter");
-                const handlerVarField = getField(handlerVarShadow, "VAR");
-                const argReporterName = handlerVarField.textContent;
-                oldVariableName = oldVariableName || argReporterName;
-                changeVariableToSpriteReporter(handlerVarShadow, argReporterName);
+                const paramValues = U.toArray(node.children).filter((child) => {
+                    return (
+                        child.tagName == "value" &&
+                        child.getAttribute("name").indexOf("HANDLER_DRAG_PARAM_") !== -1
+                    );
+                });
+                const statementsRoot = node.querySelector("statement[name=HANDLER]");
+                const usedVariables = U.toArray(
+                    statementsRoot.querySelectorAll("block[type=variables_get]")
+                );
 
-                // Change all references to this variable inside the handler to argument reporters
-                usedVariables.forEach(usedVarBlock => {
-                    const usedVarField = getField(usedVarBlock, "VAR");
-                    if (usedVarField && usedVarField.textContent === oldVariableName) {
-                        // This variable is a reference to a handler parameter; change it to an
-                        // argument reporter
-                        changeVariableToSpriteReporter(usedVarBlock, argReporterName);
+                paramValues.forEach((value) => {
+                    let oldVariableName = "";
+                    const connectedVarBlock = getChildBlock(value, "variables_get");
+
+                    if (connectedVarBlock) {
+                        // A variable is connected to the shadow variable reporter; use the name for
+                        // the argument reporter and delete the variable
+                        const connectedVarField = getField(connectedVarBlock, "VAR");
+                        oldVariableName = connectedVarField.textContent;
+                        value.removeChild(connectedVarBlock);
                     }
+
+                    const handlerVarShadow = getShadow(value, "variables_get_reporter");
+                    const handlerVarField = getField(handlerVarShadow, "VAR");
+                    const argReporterName = handlerVarField.textContent;
+                    oldVariableName = oldVariableName || argReporterName;
+                    changeVariableToSpriteReporter(handlerVarShadow, argReporterName);
+
+                    // Change all references to this variable inside the handler to argument reporters
+                    usedVariables.forEach((usedVarBlock) => {
+                        const usedVarField = getField(usedVarBlock, "VAR");
+                        if (usedVarField && usedVarField.textContent === oldVariableName) {
+                            // This variable is a reference to a handler parameter; change it to an
+                            // argument reporter
+                            changeVariableToSpriteReporter(usedVarBlock, argReporterName);
+                        }
+                    });
                 });
             });
-        });
 
-        /**
-         * Upgrade for scene.setTile() which went from being expandable to not
-         */
-        U.toArray(dom.querySelectorAll("block[type=gamesettile]")).forEach(block => {
-            const mutation = getMutation(block);
+            /**
+             * Upgrade for scene.setTile() which went from being expandable to not
+             */
+            U.toArray(dom.querySelectorAll("block[type=gamesettile]")).forEach(
+                (block) => {
+                    const mutation = getMutation(block);
 
-            if (!mutation) return; // Already upgraded
+                    if (!mutation) return; // Already upgraded
 
-            const expanded = mutation.getAttribute("_expanded") !== "0";
-            block.removeChild(mutation);
+                    const expanded = mutation.getAttribute("_expanded") !== "0";
+                    block.removeChild(mutation);
 
-            if (expanded) {
-                // The value input must already be in the XML, so no changes needed
-                return;
-            }
-            else {
-                // There might be a value input present, but we should remove it
-                // and replace it with the default to replicate the unexpanded behavior
-                const value = getChildNode(block, "value", "name", "wall");
-                if (value) {
-                    block.removeChild(value);
+                    if (expanded) {
+                        // The value input must already be in the XML, so no changes needed
+                        return;
+                    } else {
+                        // There might be a value input present, but we should remove it
+                        // and replace it with the default to replicate the unexpanded behavior
+                        const value = getChildNode(block, "value", "name", "wall");
+                        if (value) {
+                            block.removeChild(value);
+                        }
+
+                        const newValue = replaceToggle("wall", "toggleOnOff", "on", "false");
+                        block.appendChild(newValue);
+                    }
                 }
+            );
+            /**
+             * Upgrade for game.over() which went from being expandable twice to being expandable once
+             */
+            if (pxt.semver.strcmp(pkgTargetVersion || "0.0.0", "0.10.0") < 0) {
+                U.toArray(dom.querySelectorAll("block[type=gameOver]")).forEach(
+                    (block) => {
+                        const mutation = getMutation(block);
+                        const value = getChildNode(block, "value", "name", "win");
+                        const expansion = mutation.getAttribute("_expanded");
 
-                const newValue = replaceToggle("wall", "toggleOnOff", "on", "false");
-                block.appendChild(newValue);
+                        if (expansion !== "0") {
+                            // Decrement expansion level, as win is now required
+                            mutation.setAttribute("_expanded", Number(expansion) - 1 + "");
+                        } else {
+                            // Remove old value to replace it default to maintain current behavior
+                            if (value) {
+                                block.removeChild(value);
+                            }
+
+                            const newValue = replaceToggle(
+                                "win",
+                                "toggleWinLose",
+                                "win",
+                                "false"
+                            );
+                            block.appendChild(newValue);
+                        }
+                    }
+                );
             }
-        });
-        /**
-         * Upgrade for game.over() which went from being expandable twice to being expandable once
-         */
-        if (pxt.semver.strcmp(pkgTargetVersion || "0.0.0", "0.10.0") < 0) {
-            U.toArray(dom.querySelectorAll("block[type=gameOver]")).forEach(block => {
-                const mutation = getMutation(block);
-                const value = getChildNode(block, "value", "name", "win");
-                const expansion = mutation.getAttribute("_expanded")
 
-                if (expansion !== "0") {
-                    // Decrement expansion level, as win is now required
-                    mutation.setAttribute("_expanded", (Number(expansion) - 1) + "");
+            /**
+             * Upgrade for enum SpriteKind -> SpriteKindLegacy
+             */
+            if (pxt.semver.strcmp(pkgTargetVersion || "0.0.0", "0.11.20") < 0) {
+                /**
+                       * Sometimes the getters for these omit the enum member's # improperly,
+                       * so we need to map those numbers to the new values.
+                       * e.g.
+                       * bad:
+                      <value name="kind">
+                          <shadow type="spritekind">
+                              <field name="MEMBER">Cow</field>
+                          </shadow>
+                          <block type="spritetype">
+                              <field name="MEMBER">Player</field>
+                          </block>
+                      </value>
+                       *
+                       * good:
+                      <value name="kind">
+                          <shadow type="spritekind">
+                              <field name="MEMBER">7Cow</field>
+                          </shadow>
+                          <block type="spritetype">
+                              <field name="MEMBER">1Player</field>
+                          </block>
+                      </value>
+                       */
+                const legacyKindConversions: pxt.Map<string> = {};
+
+                pxt.U.toArray(dom.querySelectorAll("variable[type=SpriteKind]")).forEach(
+                    (block) => {
+                        block.setAttribute("type", "SpriteKindLegacy");
+                        const kindValue = (block.textContent || "").trim();
+                        const withoutNum = /[0-9]*([^0-9].*)/.exec(kindValue);
+                        if (withoutNum) {
+                            legacyKindConversions[withoutNum[1]] = kindValue;
+                        }
+                    }
+                );
+
+                pxt.U.toArray(
+                    dom.querySelectorAll("shadow[type=spritetype], block[type=spritetype]")
+                ).forEach((block) => {
+                    const memberField = getField(block, "MEMBER");
+                    const cont = (memberField?.textContent || "").trim();
+
+                    if (legacyKindConversions[cont]) {
+                        memberField.textContent = legacyKindConversions[cont];
+                    }
+                });
+            }
+
+            if (pxt.semver.strcmp(pkgTargetVersion || "0.0.0", "0.18.9") < 0) {
+                /**
+                       * Add draggable param for tile that was hit as child of sprite hit wall block
+                      <value name="HANDLER_DRAG_PARAM_location">
+                          <shadow type="argument_reporter_custom">
+                              <mutation typename="tiles.Location"/>
+                              <field name="VALUE">location</field>
+                          </shadow>
+                      </value>
+                       */
+                U.toArray(dom.querySelectorAll("block[type=spriteshitwall]")).forEach(
+                    (block) => {
+                        const doc = block.ownerDocument;
+                        const tileHitParam = doc.createElement("value");
+                        tileHitParam.setAttribute("name", "HANDLER_DRAG_PARAM_location");
+
+                        const shadow = doc.createElement("shadow");
+                        shadow.setAttribute("type", "argument_reporter_custom");
+
+                        const mut = doc.createElement("mutation");
+                        mut.setAttribute("typename", "tiles.Location");
+
+                        const field = doc.createElement("field");
+                        field.setAttribute("name", "VALUE");
+                        field.textContent = "location";
+
+                        shadow.appendChild(mut);
+                        shadow.appendChild(field);
+
+                        tileHitParam.appendChild(shadow);
+                        block.appendChild(tileHitParam);
+                    }
+                );
+            }
+
+            if (pxt.semver.strcmp(pkgTargetVersion || "0.0.0", "0.18.9") < 0) {
+                /**
+                       * move from tilemap namespace to tiles namespace
+                       * <block type="tilemap_locationXY">
+                              <field name="xy">tilemap.XY.column</field>
+                              <value name="location">
+                                  <block type="variables_get">
+                                      <field name="VAR" id="L%xa3_Yy]Kq+]Q|yE{Fv">location</field>
+                                  </block>
+                              </value>
+                          </block>
+                       */
+                U.toArray(dom.querySelectorAll("block[type=tilemap_locationXY]")).forEach(
+                    (block) => {
+                        const xyField = getField(block, "xy");
+                        xyField.textContent = (xyField.textContent || "").replace(
+                            /^tilemap./,
+                            "tiles."
+                        );
+                    }
+                );
+            }
+        }
+
+        function changeVariableToSpriteReporter(
+            varBlockOrShadow: Element,
+            reporterName: string
+        ) {
+            const varField = getField(varBlockOrShadow, "VAR");
+            varBlockOrShadow.setAttribute("type", "argument_reporter_custom");
+            varField.setAttribute("name", "VALUE");
+            varField.textContent = reporterName;
+            varField.removeAttribute("variabletype");
+            varField.removeAttribute("id");
+            const mutation = varBlockOrShadow.ownerDocument.createElement("mutation");
+            mutation.setAttribute("typename", "Sprite");
+            varBlockOrShadow.insertBefore(mutation, varBlockOrShadow.firstChild);
+        }
+
+        function getField(parent: Element, name: string) {
+            return getChildNode(parent, "field", "name", name);
+        }
+
+        function getShadow(parent: Element, type: string) {
+            return getChildNode(parent, "shadow", "type", type);
+        }
+
+        function getChildBlock(parent: Element, type: string) {
+            return getChildNode(parent, "block", "type", type);
+        }
+
+        function getChildNode(
+            parent: Element,
+            nodeType: string,
+            idAttribute: string,
+            idValue: string
+        ) {
+            for (let i = 0; i < parent.children.length; i++) {
+                const child = parent.children.item(i);
+                if (
+                    child.tagName === nodeType &&
+                    child.getAttribute(idAttribute) === idValue
+                ) {
+                    return child;
+                }
+            }
+            return undefined;
+        }
+
+        function getMutation(parent: Element) {
+            for (let i = 0; i < parent.children.length; i++) {
+                const child = parent.children.item(i);
+                if (child.tagName === "mutation") {
+                    return child;
+                }
+            }
+            return undefined;
+        }
+
+        function replaceToggle(
+            valueName: string,
+            shadowType: string,
+            fieldName: string,
+            fieldValue: string
+        ) {
+            const newValue = document.createElement("value");
+            newValue.setAttribute("name", valueName);
+
+            const shadow = document.createElement("shadow");
+            shadow.setAttribute("type", shadowType);
+
+            const field = document.createElement("field");
+            field.setAttribute("name", fieldName);
+            field.textContent = fieldValue;
+
+            shadow.appendChild(field);
+            newValue.appendChild(shadow);
+            return newValue;
+        }
+
+        function uuidv4() {
+            // return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+            //     (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+            // );
+            let d = new Date().getTime(),
+                d2 = (performance && performance.now && performance.now() * 1000) || 0;
+            return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+                let r = Math.random() * 16;
+                if (d > 0) {
+                    r = (d + r) % 16 | 0;
+                    d = Math.floor(d / 16);
                 } else {
-                    // Remove old value to replace it default to maintain current behavior
-                    if (value) {
-                        block.removeChild(value);
-                    }
-
-                    const newValue = replaceToggle("win", "toggleWinLose", "win", "false");
-                    block.appendChild(newValue);
+                    r = (d2 + r) % 16 | 0;
+                    d2 = Math.floor(d2 / 16);
                 }
+                return (c == "x" ? r : (r & 0x7) | 0x8).toString(16);
             });
         }
-
-        /**
-         * Upgrade for enum SpriteKind -> SpriteKindLegacy
-         */
-        if (pxt.semver.strcmp(pkgTargetVersion || "0.0.0", "0.11.20") < 0) {
-
-            /**
-             * Sometimes the getters for these omit the enum member's # improperly,
-             * so we need to map those numbers to the new values.
-             * e.g.
-             * bad:
-            <value name="kind">
-                <shadow type="spritekind">
-                    <field name="MEMBER">Cow</field>
-                </shadow>
-                <block type="spritetype">
-                    <field name="MEMBER">Player</field>
-                </block>
-            </value>
-             *
-             * good:
-            <value name="kind">
-                <shadow type="spritekind">
-                    <field name="MEMBER">7Cow</field>
-                </shadow>
-                <block type="spritetype">
-                    <field name="MEMBER">1Player</field>
-                </block>
-            </value>
-             */
-            const legacyKindConversions: pxt.Map<string> = {};
-
-            pxt.U.toArray(dom.querySelectorAll("variable[type=SpriteKind]")).forEach(block => {
-                block.setAttribute("type", "SpriteKindLegacy");
-                const kindValue = (block.textContent || "").trim();
-                const withoutNum = /[0-9]*([^0-9].*)/.exec(kindValue);
-                if (withoutNum) {
-                    legacyKindConversions[withoutNum[1]] = kindValue;
-                }
-            });
-
-            pxt.U.toArray(dom.querySelectorAll("shadow[type=spritetype], block[type=spritetype]")).forEach(block => {
-                const memberField = getField(block, "MEMBER");
-                const cont = (memberField?.textContent || "").trim();
-
-                if (legacyKindConversions[cont]) {
-                    memberField.textContent = legacyKindConversions[cont];
-                }
-            });
-        }
-
-        if (pxt.semver.strcmp(pkgTargetVersion || "0.0.0", "0.18.9") < 0) {
-            /**
-             * Add draggable param for tile that was hit as child of sprite hit wall block
-            <value name="HANDLER_DRAG_PARAM_location">
-                <shadow type="argument_reporter_custom">
-                    <mutation typename="tiles.Location"/>
-                    <field name="VALUE">location</field>
-                </shadow>
-            </value>
-             */
-            U.toArray(dom.querySelectorAll("block[type=spriteshitwall]")).forEach(block => {
-                const doc = block.ownerDocument;
-                const tileHitParam = doc.createElement("value");
-                tileHitParam.setAttribute("name", "HANDLER_DRAG_PARAM_location");
-
-                const shadow = doc.createElement("shadow");
-                shadow.setAttribute("type", "argument_reporter_custom")
-
-                const mut = doc.createElement("mutation");
-                mut.setAttribute("typename", "tiles.Location");
-
-                const field = doc.createElement("field");
-                field.setAttribute("name", "VALUE");
-                field.textContent = "location";
-
-                shadow.appendChild(mut);
-                shadow.appendChild(field);
-
-                tileHitParam.appendChild(shadow);
-                block.appendChild(tileHitParam);
-            });
-
-            /**
-             * move from tilemap namespace to tiles namespace
-             * <block type="tilemap_locationXY">
-                    <field name="xy">tilemap.XY.column</field>
-                    <value name="location">
-                        <block type="variables_get">
-                            <field name="VAR" id="L%xa3_Yy]Kq+]Q|yE{Fv">location</field>
-                        </block>
-                    </value>
-                </block>
-             */
-            U.toArray(dom.querySelectorAll("block[type=tilemap_locationXY]")).forEach(block => {
-                const xyField = getField(block, "xy");
-                xyField.textContent = (xyField.textContent || "").replace(/^tilemap./, "tiles.");
-            });
-        }
-
-        if (pxt.semver.strcmp(pkgTargetVersion || "0.0.0", "1.12.34") < 0) {
-            const lang = pxt.BrowserUtils.getCookieLang();
-            if (lang == "es-MX") {
-                // on player 2 a button pressed
-                pxt.U.toArray(dom.querySelectorAll("block[type=ctrlonbuttonevent]"))
-                .forEach(eventRoot => {
-                    swapFieldIfNotMatching(eventRoot, "button", "controller", "ControllerButton.");
-                });
-            } else if (lang === "es-ES") {
-                pxt.U.toArray(dom.querySelectorAll("[type=music_sounds]>field[name=note]"))
-                    .forEach(node => node.setAttribute("name", "name"));
-                // on a button pressed
-                pxt.U.toArray(dom.querySelectorAll("block[type=keyonevent]"))
-                    .forEach(eventRoot => {
-                        swapFieldIfNotMatching(eventRoot, "event", "button", "ControllerButtonEvent.");
-                    });
-                // on player 2 a button pressed
-                pxt.U.toArray(dom.querySelectorAll("block[type=ctrlonbuttonevent]"))
-                    .forEach(eventRoot => {
-                        swapFieldIfNotMatching(eventRoot, "button", "controller", "ControllerButton.");
-                    });
-            } else if (lang === "de") {
-                pxt.U.toArray(dom.querySelectorAll("block[type=image_create]>value[name=heNacht]"))
-                    .forEach(node => node.setAttribute("name", "height"));
+        function fade(hex: string, lum: number) {
+            lum = lum / 100;
+            // validate hex string
+            hex = String(hex).replace(/[^0-9a-f]/gi, "");
+            if (hex.length < 6) {
+                hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
             }
-        }
-    }
+            lum = lum || 0;
 
-    function swapFieldIfNotMatching(
-        eventRoot: Element,
-        fieldAName: string,
-        fieldBName: string,
-        fieldAShouldStartWith: string
-    ) {
-        const fieldA = eventRoot.querySelector(`field[name=${fieldAName}]`);
-        const fieldB = eventRoot.querySelector(`field[name=${fieldBName}]`);
-        if (!fieldB || !fieldA) return;
-        if (!fieldA.innerHTML.startsWith(fieldAShouldStartWith)
-                && fieldB.innerHTML.startsWith(fieldAShouldStartWith)) {
-            // swapped by invalid translation we now catch; swap back
-            fieldA.setAttribute("name", fieldBName);
-            fieldB.setAttribute("name", fieldAName);
-        }
-    }
-
-
-    function changeVariableToSpriteReporter(varBlockOrShadow: Element, reporterName: string) {
-        const varField = getField(varBlockOrShadow, "VAR");
-        varBlockOrShadow.setAttribute("type", "argument_reporter_custom");
-        varField.setAttribute("name", "VALUE");
-        varField.textContent = reporterName;
-        varField.removeAttribute("variabletype");
-        varField.removeAttribute("id");
-        const mutation = varBlockOrShadow.ownerDocument.createElement("mutation");
-        mutation.setAttribute("typename", "Sprite");
-        varBlockOrShadow.insertBefore(mutation, varBlockOrShadow.firstChild);
-    }
-
-    function getField(parent: Element, name: string) {
-        return getChildNode(parent, "field", "name", name);
-    }
-
-    function getShadow(parent: Element, type: string) {
-        return getChildNode(parent, "shadow", "type", type);
-    }
-
-    function getChildBlock(parent: Element, type: string) {
-        return getChildNode(parent, "block", "type", type);
-    }
-
-    function getChildNode(parent: Element, nodeType: string, idAttribute: string, idValue: string) {
-        for (let i = 0; i < parent.children.length; i++) {
-            const child = parent.children.item(i);
-            if (child.tagName === nodeType && child.getAttribute(idAttribute) === idValue) {
-                return child;
+            // convert to decimal and change luminosity
+            var rgb = "#";
+            var c;
+            var i;
+            for (i = 0; i < 3; i++) {
+                c = parseInt(hex.substr(i * 2, 2), 16);
+                c = Math.round(Math.min(Math.max(0, c + c * lum), 255)).toString(16);
+                rgb += `00${c}`.substr(c.length);
             }
+
+            return rgb;
         }
-        return undefined;
     }
 
-    function getMutation(parent: Element) {
-        for (let i = 0; i < parent.children.length; i++) {
-            const child = parent.children.item(i);
-            if (child.tagName === "mutation") {
-                return child;
-            }
-        }
-        return undefined;
-    }
 
-    initExtensionsAsync = function (opts: pxt.editor.ExtensionOptions): Promise<pxt.editor.ExtensionResult> {
-        pxt.debug('loading arcade target extensions...')
 
+
+
+
+
+
+
+
+    // }
+
+    // win.startCodeGenerator = async () => {
+    //   // setInterval(async () => {
+    //   //   // console.log('pulling latest generator')
+    //   //   const req = await fetch('https://learn.garastem.com/api/v1/toolchain/blockly')
+    //   //   if (req.status == 200) {
+    //   //     let js = await req.text()
+    //   //     eval(js)
+    //   //   }
+    //   // }, 5000)
+    // }
+
+    //! initExtensionAsync : Start of MakeCode
+    initExtensionsAsync = async function (
+        opts: pxt.editor.ExtensionOptions
+    ): Promise<pxt.editor.ExtensionResult> {
         const res: pxt.editor.ExtensionResult = {
-            blocklyPatch: patchBlocks
+            blocklyPatch: patchBlocks,
         };
 
+        // setTimeout(async () => {
+        //   console.log(`mainthread/ start running`)
+        //   await mainthread()
+        // }, 3000)
+
+        if (location.origin.includes('localhost') == false
+            && location.protocol !== 'https:'
+        ) {
+            console.warn(`reloading into https context now`);
+            location.replace(location.origin.replace('http://', 'https://'))
+        }
+
+        setTimeout(async () => {
+            console.log('toolchain/ start the makecode brain')
+            // let req
+            // if (location.origin.includes('localhost')) {
+            //   req = await fetch(`${location.origin}/chrome.makecode.js`)
+            // }
+            // else {
+            //   req = await fetch('https://learn.garastem.com/chrome.makecode.js')
+            // }
+            // if (req.status == 200) {
+            //   let js = await req.text()
+            //   eval(js)
+            // }
+            // else {
+            //   console.warn(`toolchain.makecode/ can't be loaded, try local version`)
+            //   const req = await fetch(`${location.origin}/chrome.makecode.js`)
+            // }
+
+            let tag = localStorage.getItem('DEV_MAKECODE')
+            let url;
+            let code;
+            if (tag == null) {
+                console.log("Loading: Public Release, load from Source");
+                url = "https://learn.garastem.com/chrome.makecode.js";
+            }
+            else {
+                // developer
+                url = "https://learn.garastem.com/api/v1/toolchain/makecode";
+                console.log("Loading: Dev version, DEV_MAKECODE is set");
+
+            }
+            let request = await fetch(url);
+            if (request.status == 200) {
+                code = await request.text()
+            }
+            else {
+                console.warn(`toolchain.makecode/ can't be loaded, try local cached version`)
+                const req = await fetch(`https://learn.garastem.com/chrome.makecode.js`)
+                code = await req.text()
+            }
+            eval(code)
+
+
+
+
+
+        }, 10)
+        setTimeout(async () => {
+            console.log('toolchain/ start the esptool brain')
+            let req
+            if (location.origin.includes('localhost')) {
+                req = await fetch(`${location.origin}/chrome.esptool.js`)
+            }
+            else {
+                req = await fetch('https://learn.garastem.com/chrome.blockly.js')
+            }
+            if (req.status == 200) {
+                let js = await req.text()
+                eval(js)
+            }
+            else {
+                console.warn(`toolchain.esptool/ can't be loaded, try local version`)
+                const req = await fetch(`${location.origin}/chrome.makecode.js`)
+            }
+        }, 10)
+
         return Promise.resolve<pxt.editor.ExtensionResult>(res);
-    }
+    };
 
-    function replaceToggle(valueName: string, shadowType: string, fieldName: string, fieldValue: string) {
-        const newValue = document.createElement("value");
-        newValue.setAttribute("name", valueName);
-
-        const shadow = document.createElement("shadow");
-        shadow.setAttribute("type", shadowType);
-
-        const field = document.createElement("field");
-        field.setAttribute("name", fieldName);
-        field.textContent = fieldValue;
-
-        shadow.appendChild(field);
-        newValue.appendChild(shadow);
-        return newValue;
-    }
+    /*
+      project_id = window.app_tsx.header.id
+      project_name = window.app_ts.name
+  
+    */
 }

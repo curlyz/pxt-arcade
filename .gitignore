@@ -15,3 +15,5 @@ package-lock.json
 *.code-workspace
 *.DS_STORE
 .pxt/
+public/
+release/
