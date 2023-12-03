@@ -349,37 +349,63 @@ enum InternationalVoices {
 }
 
 enum DayOfWeek {
+    //% block.loc.vi="Thứ hai"
     Monday,
+    //% block.loc.vi="Thứ ba"
     Tuesday,
+    //% block.loc.vi="Thứ tư"
     Wednesday,
+    //% block.loc.vi="Thứ năm"
     Thursday,
+    //% block.loc.vi="Thứ sáu"
     Friday,
+    //% block.loc.vi="Thứ bảy"
     Saturday,
+    //% block.loc.vi="Chúa nhật"
     Sunday
 }
 enum TimeType {
+    //% block.loc.vi="giây"
     Second,
+    //% block.loc.vi="phút"
     Minute,
+    //% block.loc.vi="giờ"
     Hour,
+    //% block.loc.vi="ngày"
     Date,
+    //% block.loc.vi="tháng"
     Month,
+    //% block.loc.vi="năm"
     Year,
+    //% block.loc.vi="thứ"
     Day,
+    //% block.loc.vi="epoch"
     Epoch,
 }
 //𝙿𝙾𝚁𝚃𝟷 𝙿𝙾𝚁𝚃𝟸 𝙿𝙾𝚁𝚃𝟹 𝙿𝙾𝚁𝚃𝟺 𝙿��𝚁𝚃𝟻 𝙿𝙾𝚁𝚃𝟼
 enum Controller {
+    //% block.loc.vi = "Cổng 1"
     PORT1,
+    //% block.loc.vi = "Cổng 2"
     PORT2,
+    //% block.loc.vi = "Cổng 3"
     PORT3,
+    //% block.loc.vi = "Cổng 4"
     PORT4,
+    //% block.loc.vi = "Cổng 5"
     PORT5,
+    //% block.loc.vi = "Cổng 6"
     PORT6,
 }
 enum ControllerSub {
+
+    //% block.loc.vi="Cổng 1"
     PORT1,
+    //% block.loc.vi="Cổng 2"
     PORT2,
+    //% block.loc.vi="Cổng 3"
     PORT3,
+    //% block.loc.vi="Cổng 4"
     PORT4,
     // PORT5,
     // PORT6,
@@ -510,16 +536,16 @@ enum TimeUnit {
 
 enum DisplayLine {
     //% block="Line 1"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="Kênh 1"
     Line1,
     //% block="Line 2"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="Kênh 2"
     Line2,
     //% block="Line 3"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="Kênh 3"
     Line3,
     //% block="Line 4"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="Kênh 4"
     Line4,
 }
 
@@ -564,36 +590,36 @@ enum IRChannel {
 
 enum InputButtonEvent {
     //% block="press"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="nhấn"
     ButtonPressed,
     //% block="release"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="thả"
     ButtonReleased,
     //% block="clicked 1 times"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="bấm 1 lần"
     ButtonPressed1,
     //% block="clicked 2 times"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="bấm 2 lần"
     ButtonPressed2,
     //% block="clicked 3 times"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="bấm 3 lần"
     ButtonPressed3,
     //% block="clicked 4 times"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="bấm 4 lần"
     ButtonPressed4,
 }
 enum InputSoundEvent {
     //% block="heard 1 clap"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="vỗ 1 cái"
     Sound1Clap,
     //% block="heard 2 claps"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="vỗ 2 cái"
     Sound2Clap,
     //% block="heard 3 claps"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="vỗ 3 cái"
     Sound3Clap,
     //% block="heard 4 claps"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="vỗ 4 cái"
     Sound4Clap,
 }
 
@@ -733,6 +759,7 @@ enum GroupChannelList {
 namespace Input {
     //% blockId="makecode_webcam_stream"
     //% block="$module $port get stream"
+    //% block.loc.vi="lấy stream từ $module $port"
     //% block.loc.vi="__________________________________"
     //% group="Camera"
     //% module.fieldEditor="label"
@@ -829,7 +856,7 @@ namespace Input {
 
     //% blockId="grobot_line_readmask2"
     //% block="$module $port Line Follow 2 Channel: check if left%c1 right%c2"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="$module $port kiểm tra 2 kênh: $c1 $c2"
     //% group="Line Follower Sensor"
     //% blockGap=6
     //% module.fieldEditor="label"
@@ -849,7 +876,7 @@ namespace Input {
 
     //% blockId="grobot_line_readsensor2"
     //% block="$module $port Line Follow 2 Channel: read $channel"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="$module $port đọc kênh $channel"
     //% group="Line Follower Sensor"
     //% blockGap=6
     //% module.fieldEditor="label"
@@ -874,7 +901,7 @@ namespace Input {
 
     // //% blockId="grobot_line_readposition2"
     // //% block="$module Read line position (0-100)"
-    //% block.loc.vi="__________________________________"// 
+    //% block.loc.vi="__________________________________"//
     //% group="Line Follower (2 channels)"
     // //% blockGap=6
     // //% module.fieldEditor="label"
@@ -885,11 +912,13 @@ namespace Input {
     // export function GB_ReadLinePosition2(module: string): any {
     //     return 0;
     // }
+    
+
 
     //% group="Button"
     //% blockId="input_button_callback"
     //% block="$module $port $btn when $event do"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="khi $button ở $port được $event thì"
     //% port.fieldEditor="gridpicker"
     //% port.defl=[["Heheheh","WWW"]]
     //% port.fieldOptions.column=5
@@ -899,7 +928,7 @@ namespace Input {
     //% event.fieldEditor="gridpicker"
     //% weight=100
     //% blockHidden=false
-    export function ButtonOnEvent(
+    export function input_button_callback(
         module: string,
         port: ControllerSub,
         btn: ButtonIndex,
@@ -911,7 +940,7 @@ namespace Input {
 
     //% group="Button"
     //% blockId="input_button_checkevent"
-    //% block="$module $port $btn is $event"
+    //% block="$module $port nút $btn được $event"
     //% block.loc.vi="__________________________________"
     //% port.fieldEditor="gridpicker"
     //% port.defl=[["Heheheh","WWW"]]
@@ -964,7 +993,7 @@ namespace Input {
     //% group="Laser"
     //% blockId="input_laser_checkevent"
     //% block="$module $port is detected"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="khi $module ở $port phát hiện laser"
     //% port.fieldEditor="gridpicker"
     //% port.defl=[["Heheheh","WWW"]]
     //% port.fieldOptions.column=2
@@ -2623,6 +2652,7 @@ namespace AI {
 
     //% blockId="livestream"
     //% block="from livestream $streamId"
+    //% block.loc.vi="lấy ảnh từ livestream $streamId"
     //% color="#a5268b"
     //% group="Video Stream"
     export function livestream(streamId: string) {
@@ -3141,6 +3171,7 @@ namespace grobot {
 
     //% blockId="grobot_attach_encoder"
     //% block="Grobot: attach speedometer to %port"
+    //% block.loc.vi = "Grobot: kết nối đo tốc độ bánh vào $port"
     //% advanced=true
     //% group="Settings"
     //% weight=10

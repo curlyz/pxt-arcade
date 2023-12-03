@@ -573,7 +573,8 @@
             "ja",
             "ko",
             "es-ES",
-            "es-MX"
+            "es-MX",
+            "vi"
         ],
         "invertedMenu": true,
         "showHomeScreen": true,
