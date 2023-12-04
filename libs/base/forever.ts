@@ -523,10 +523,15 @@ enum UnitLength {
 }
 
 enum TimeUnit {
+    //% block.loc.vi="us"
     Microseconds,
+    //% block.loc.vi="ms"
     Milisecond,
+    //% block.loc.vi="giây"
     Second,
+    //% block.loc.vi="phút"
     Minute,
+    //% block.loc.vi="giờ "
     Hour
 }
 
@@ -903,7 +908,7 @@ namespace Input {
     //% group="Button"
     //% blockId="input_button_callback"
     //% block="$module $port $btn when $event do"
-    //% block.loc.vi="khi $button ở $port được $event thì"
+    //% block.loc.vi="$module $port khi $btn được $event thì"
     //% port.fieldEditor="gridpicker"
     //% port.defl=[["Heheheh","WWW"]]
     //% port.fieldOptions.column=5
@@ -925,8 +930,8 @@ namespace Input {
 
     //% group="Button"
     //% blockId="input_button_checkevent"
-    //% block="$module $port $btn được $event"
-    //% block.loc.vi="__________________________________"
+    //% block="$module $port $btn is $event"
+    //% block.loc.vi="$module $port $btn được $event"
     //% port.fieldEditor="gridpicker"
     //% port.defl=[["Heheheh","WWW"]]
     //% port.fieldOptions.column=2
@@ -2588,7 +2593,7 @@ namespace Bluetooth {
 //% color="#f76821" weight=6000 icon="\uf0db" blockGap=6
 namespace GaraBlock {
     //% block="GaraBlock: say  $text"
-    //% block.loc.vi="__________________________________"
+    //% block.loc.vi="GaraBlock: nói %text"
     //% blockId="gb_say_multiple"
     //% module.fieldEditor="label"
     //% module.defl="tag_speaker"
@@ -2606,23 +2611,25 @@ namespace GaraBlock {
     }
 
     //% block="GaraBlock: get answer for $text"
+    //% block.loc.vi="GaraBlock: lấy đáp án khi hỏi $text"
     //% blockId="gb_input"
     //% text.shadow="text"
     export function gb_input(text: any): any {
         return true
     }
 
-    //% block="GaraBlock: play song $text || from second $start to second $stop"
-    //% blockId="gb_play"
-    //% text.defl="Input Youtube Link"
-    //% text.shadow=text
-    //% blockHidden=true
-    export function gb_play(text: any, start: number, stop: number) {
+    // //% block="GaraBlock: play song $text || from second $start to second $stop"
+    // //% blockId="gb_play"
+    // //% text.defl="Input Youtube Link"
+    // //% text.shadow=text
+    // //% blockHidden=true
+    // export function gb_play(text: any, start: number, stop: number) {
 
-    }
+    // }
 
 
     //% block="GaraBlock: show text $text"
+    //% block.loc.vi="GaraBlock: hiện thông báo $text"
     //% blockId="gb_noti"
     //% text.shadow=text
     //% text.defl="Hello"
@@ -3022,11 +3029,14 @@ namespace Cloud {
 
 }
 
+
+
 //% color="#20bf6b" weight=1003 icon="\uf0c2"
 namespace loops {
     //% block="wait until $cond"`
     //% block.loc.vi="__________________________________"
     //% blockId="wait_until"
+    //% deprecated=true
     export function wait_until(cond: boolean) {
 
     }
