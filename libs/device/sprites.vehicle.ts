@@ -1,3 +1,4 @@
+//% advance=true //gb.override: hide the irrelevant block
 namespace sprites.vehicle {
     //% fixedInstance jres blockIdentity=images._image
     //% tags="transportation"

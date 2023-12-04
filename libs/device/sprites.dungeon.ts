@@ -1,3 +1,4 @@
+//% advance=true //gb.override: hide the irrelevant block
 namespace sprites.dungeon {
     //% fixedInstance jres blockIdentity=images._tile
     //% tags="?tile electronics"

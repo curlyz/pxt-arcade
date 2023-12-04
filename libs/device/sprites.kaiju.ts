@@ -1,3 +1,4 @@
+//% advance=true //gb.override: hide the irrelevant block
 namespace sprites.kaiju {
     //% fixedInstance jres blockIdentity=images._image
     //% tags="animals"

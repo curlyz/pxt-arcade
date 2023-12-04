@@ -1,3 +1,4 @@
+//% advance=true //gb.override: hide the irrelevant block
 namespace sprites.space {
     //% fixedInstance jres blockIdentity=images._image
     //% tags="space"
