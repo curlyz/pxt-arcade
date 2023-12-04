@@ -39,6 +39,7 @@
     },
     "scripts": {
         "serve": "node node_modules/pxt-core/built/pxt.js serve",
-        "copy-sim": "node ./scripts/copyArcadeSim.js"
+        "copy-sim": "node ./scripts/copyArcadeSim.js",
+        "relink": "npm link ../pxt && npm link ../pxt-common-packages && cd ../pxt-common-packages && npm link ../pxt"
     }
 }
