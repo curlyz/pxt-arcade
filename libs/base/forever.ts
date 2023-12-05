@@ -3786,8 +3786,8 @@ namespace App {
     }
 
     //% blockId="webcam_frame"
-    //% block="$webcam webcam"
-    //% block.loc.vi="$webcam webcam"
+    //% block="$webcam"
+    //% block.loc.vi="$webcam"
     //% group="Webcam"
     //% blockHidden=true
     export function webcam_frame(webcam: WebcamType): any {
