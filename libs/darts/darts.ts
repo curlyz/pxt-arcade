@@ -11,13 +11,6 @@ namespace darts {
      * @param x optional initial x position, eg: 10
      * @param y optional initial y position, eg: 110
      */
-    //% blockId=dartsCreate block="dart %img=screen_image_picker of kind %kind=spritekind || at x %x y %y"
-    //% expandableArgumentMode=toggle
-    //% inlineInputMode=inline
-    //% blockSetVariable=myDart
-    //% weight=100
-    //% group="Create"
-    //% help=darts/create
     export function create(img: Image,
                             kind: number,
                             x: number = 10,

@@ -8,6 +8,7 @@ namespace game {
     //% blockId=arcade_game_reset block="reset game"
     //% group="Gameplay" weight=10
     //% help=game/reset advance=true
+    //% blockHidden=true
     export function reset() {
         control.reset();
     }
