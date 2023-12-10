@@ -4,6 +4,7 @@
  */
 //% help=loops/forever weight=100 afterOnStart=true blockNamespace="loops"
 //% blockId=forever block="forever" blockAllowMultiple=1
+//% block.loc.vi="lặp vô tận"
 function forever(a: () => void): void {
     game.forever(a);
 }
