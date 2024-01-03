@@ -222,6 +222,19 @@ enum NoteLength {
 
 }
 
+enum ReadColourMode {
+    //% block="Red Channel (0-255)"
+    Red,
+    //% block="Green Channel (0-255)"
+    Green,
+    //% block="Blue Channel (0-255)"
+    Blue,
+    //% block="RGB (array)"
+    RGB,
+    //% block="Hex (text)"
+    Hex
+}
+
 enum GNote {
     C1,
     D1,
@@ -902,7 +915,7 @@ namespace Input {
     // export function GB_ReadLinePosition2(module: string): any {
     //     return 0;
     // }
-    
+
 
 
     //% group="Button"
@@ -1414,10 +1427,11 @@ namespace Input {
 
 
 
+
     //% group="Colour Sensor"
     //% blockId="input_colour_read"
-    //% block="$module read colour"
-    //% block.loc.vi="$module đọc mã màu"
+    //% block="$module read $mode"
+    //% block.loc.vi="__________________________________"
     //% port.fieldEditor="gridpicker"
     //% port.defl=[["Heheheh","WWW"]]
     //% port.fieldOptions.column=5
@@ -1427,48 +1441,48 @@ namespace Input {
     //% event.fieldEditor="gridpicker"
     export function input_colour_read(
         module: string,
+        mode: ReadColourMode,
     ): any {
         return 0;
-    }
-
-
-    //% group="Colour Sensor"
-    //% blockId="input_colour_check"
-    //% block="$module detected $colour"
-    //% block.loc.vi="$module phát hiện màu $colour"
-    //% port.fieldEditor="gridpicker"
-    //% port.defl=[["Heheheh","WWW"]]
-    //% port.fieldOptions.column=5
-    //% port.fieldOptions.width=220
-    //% module.fieldEditor="label"
-    //% module.defl="tag_colour_sensor"
-    //% event.fieldEditor="gridpicker"
-    //% colour.shadow="colorNumberPicker"
-    export function input_colour_check(
-        module: string,
-        colour: any
-    ): boolean {
-        return false;
     }
 
 }
 
 //% color="#f99205" weight=800 icon="\uf069" blockGap=6
 namespace actuator {
+
     //% group="Pixel"
     //% blockId="output_pixel_setcolour"
     //% block="$module $port set colour $colour"
     //% block.loc.vi="$module $port chuyển màu $colour"
     //% port.fieldEditor="gridpicker"
-    //% port.defl=[["Heheheh","WWW"]]
-    //% port.fieldOptions.column=5
-    //% port.fieldOptions.width=220
     //% module.fieldEditor="label"
     //% module.defl="tag_pixel"
     //% colour.shadow="colorNumberPicker"
     //% event.fieldEditor="gridpicker"
     //% blockHidden=false
-    export function PixelSet(module: string, port: Controller, colour: number) { }
+    export function output_pixel_setcolour(module: string, port: Controller, colour: number) { }
+
+
+
+    //% group="Pixel"
+    //% blockId="output_pixel_setcoloursingle"
+    //% block="$module $port set colour $colour at position %position"
+    //% block.loc.vi="$module $port đổi màu vị trí $position thành $colour"
+    //% module.fieldEditor="label"
+    //% module.defl="tag_pixel"
+    //% colour.shadow="colorNumberPicker"
+    //% position.min=0 position.max=100
+    //% inlineInputMode=inline
+    //% weight=99
+    export function output_pixel_setcoloursingle(
+        module: string,
+        port: Controller,
+        colour: number,
+        position: number
+    ) { }
+
+
 
     //% group="Relay"
     //% blockId="output_relay_setstate"
@@ -2721,7 +2735,7 @@ enum LanguageType {
     Japanese
 }
 
-//% color="#e30ec0" weight=400 icon="\uf0c2"
+//% color="#00aeef" weight=400 icon="\uf0c2"
 namespace Cloud {
     //% group="Group"
     //% block="$tag $wifi join group $name with password $password"
@@ -3414,8 +3428,17 @@ namespace grobot {
     //% tag.fieldEditor="label"
     //% tag.defl="tag_g12"
     //% blockHidden=true
-
     export function SetBuzzer(tag: string, state: boolean) { }
+
+    //% block="$tag Spin motor M1 at $power1 and M2 at $power2"
+    //% block.loc.vi="$tag Robot: chạy hai động cơ M1 $power1 và M2 $power2"
+    //% blockId="grobot_motor_both"
+    //% group="Buzzer"
+    //% weight=89
+    //% state.shadow="toggleOnOff"
+    //% tag.fieldEditor="label"
+    //% tag.defl="tag_g12"
+    export function grobot_motor_both(tag: string, power1: number, power2: number) { }
 
     // //% block="$tag Turn Buzzer $state for $time ms"
     // //% blockId="grobot_set_buzzer"
@@ -3554,20 +3577,6 @@ namespace grobot {
     //% tag.defl="tag_g21"
     export function PlayMute(tag: string, beat: NoteLength) { }
 
-    // //% block="$tag Music: Play $semi semitones from middle C for $beat beats"
-    // //% block.loc.vi="$tag Âm : chơi nốt thứ $semi tính từ phím C trưởng trong $beats nhịp"
-    // //% blockId="PlayNote_"
-    // //% group="Music"
-    // //% weight=79
-    // //% beat.defl=1
-    // //% tag.fieldEditor="label"
-    // //% tag.defl="tag_g22"
-    // //% blockHidden=true
-    // export function PlayNote_(tag: string, semi: number, beat: number) { }
-
-
-
-
 
 
     //% group="Pixel"
@@ -3578,7 +3587,7 @@ namespace grobot {
     //% module.defl="tag_g23"
     //% colour.shadow="colorNumberPicker"
     //% weight=100
-    export function GB_PixelSetAll(module: string, colour: number) { }
+    export function grobot_pixel_setcolourall(module: string, colour: number) { }
 
     //% group="Pixel"
     //% blockId="grobot_pixel_setcoloursingle"
@@ -3589,7 +3598,7 @@ namespace grobot {
     //% colour.shadow="colorNumberPicker"
     //% position.min=0 position.max=12
     //% weight=99
-    export function GB_PixelSetSingle(
+    export function grobot_pixel_setcoloursingle(
         module: string,
         colour: number,
         position: number
@@ -3605,7 +3614,7 @@ namespace grobot {
     //% position.min=0 position.max=12
     //% state.shadow="toggleOnOff"
     //% weight=98
-    export function GB_PixelSetOff(module: string) { }
+    export function grobot_pixel_setoff(module: string) { }
 
 
     //% group="Pixel"
@@ -3617,7 +3626,7 @@ namespace grobot {
     //% speed.min=0 speed.max=1000
     //% speed.defl=30
     //% weight=97
-    export function GB_PixelSetWipe(
+    export function grobot_pixel_setwipe(
         module: string,
         colour: number,
         speed: number
@@ -3634,7 +3643,7 @@ namespace grobot {
     //% b.min=0 b.max=255
     //% inlineInputMode=inline
     //% weight=96
-    export function PixelColour(
+    export function pixel_colour(
         r: number,
         g: number,
         b: number
