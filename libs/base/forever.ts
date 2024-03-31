@@ -235,6 +235,15 @@ enum ReadColourMode {
     Hex
 }
 
+enum ServoDirection{
+    //% block="clockwise"
+    //% block.loc.vi="chiều kim đồng hồ"
+    ClockWise,
+    //% block="counter clockwise"
+    //% block.loc.vi="ngược chiều kim đồng hồ"
+    CounterClockWise
+}
+
 enum GNote {
     C1,
     D1,
@@ -1575,7 +1584,23 @@ namespace actuator {
     //% event.fieldEditor="gridpicker"
     //% angle.shadow="protractorPicker"
     //% angle.defl=90
-    export function ServoSet(module: string, port: Controller, angle: number) { }
+    export function output_servo_setangle(module: string, port: Controller, angle: number) { }
+
+    //% blockId="output_servo360_setangle"
+    //% block="$module $port rotate $direction with speed $speed"
+    //% block.loc.vi="$module $port xoay $direction với tốc độ $speed"
+    //% port.fieldEditor="gridpicker"
+    //% port.defl=[["Heheheh","WWW"]]
+    //% port.fieldOptions.column=5
+    //% port.fieldOptions.width=220
+    //% module.fieldEditor="label"
+    //% module.defl="tag_servo_360"
+    //% colour.shadow="colorNumberPicker"
+    //% event.fieldEditor="gridpicker"
+    //% angle.shadow="protractorPicker"
+    //% inlineInputMode=inline
+    //% angle.defl=90
+    export function output_servo360_setangle(module: string, port: Controller, direction: ServoDirection, speed: number) { }
 
 
 
