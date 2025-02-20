@@ -235,13 +235,13 @@ enum ReadColourMode {
     Hex
 }
 
-enum ServoDirection{
+enum ServoDirection {
     //% block="clockwise"
     //% block.loc.vi="chiều kim đồng hồ"
     ClockWise,
     //% block="counter clockwise"
     //% block.loc.vi="ngược chiều kim đồng hồ"
-    CounterClockWise
+    CounterClockWise,
 }
 
 enum GNote {
@@ -788,10 +788,12 @@ namespace Input {
     //% module.fieldEditor="label"
     //% module.defl="tag_camera"
     //% blockHidden=true
-    export function makecode_webcam_stream(module: string, port: Controller): any {
-        return ''
+    export function makecode_webcam_stream(
+        module: string,
+        port: Controller
+    ): any {
+        return "";
     }
-
 
     //% blockId="iot_camera_set_brightness"
     //% block="set camera brightness $port to $bn"
@@ -821,7 +823,13 @@ namespace Input {
     //% wifi.defl="logo_wifi"
     //% blockHidden=true
     //! [Value]
-    export function iot_read_sound(module: string, wifi: string, language: LanguageType, port: Controller, time: number): any {
+    export function iot_read_sound(
+        module: string,
+        wifi: string,
+        language: LanguageType,
+        port: Controller,
+        time: number
+    ): any {
         return 1;
     }
     //% blockId="iot_record_sound"
@@ -834,7 +842,11 @@ namespace Input {
     //% module.fieldEditor="label"
     //% module.defl="tag_microphone"
     //! [Value]
-    export function iot_record_sound(module: string, port: Controller, time: number): any {
+    export function iot_record_sound(
+        module: string,
+        port: Controller,
+        time: number
+    ): any {
         return 1;
     }
     //% blockId="iot_check_sound_button"
@@ -848,7 +860,10 @@ namespace Input {
     //% module.defl="tag_microphone"
     //% blockHidden=true
     //! [Value]
-    export function iot_check_sound_button(module: string, port: Controller): boolean {
+    export function iot_check_sound_button(
+        module: string,
+        port: Controller
+    ): boolean {
         return false;
     }
 
@@ -863,8 +878,11 @@ namespace Input {
     //% module.defl="tag_microphone"
     //% blockHidden=true
     //! [Value]
-    export function iot_read_sound_button_cb(module: string, port: Controller, handler: () => void) {
-    }
+    export function iot_read_sound_button_cb(
+        module: string,
+        port: Controller,
+        handler: () => void
+    ) { }
 
     //% blockId="grobot_line_readmask2"
     //% block="$module $port Line Follow 2 Channel: check if left%c1 right%c2"
@@ -903,12 +921,11 @@ namespace Input {
         return true;
     }
 
-
     //% block="$state"
     //% blockId="ls_state_picker__"
     //% group="Line Follower Sensor"
     export function ls_state_picker__(state: LineSensorState): boolean {
-        return false
+        return false;
     }
 
     // //% blockId="grobot_line_readposition2"
@@ -924,8 +941,6 @@ namespace Input {
     // export function GB_ReadLinePosition2(module: string): any {
     //     return 0;
     // }
-
-
 
     //% group="Button"
     //% blockId="input_button_callback"
@@ -947,8 +962,6 @@ namespace Input {
         event: InputButtonEvent,
         handler: () => void
     ) { }
-
-
 
     //% group="Button"
     //% blockId="input_button_checkevent"
@@ -982,9 +995,9 @@ namespace Input {
     //% inlineInputMode=inline
     export function input_button_readvalue(
         module: string,
-        port: ControllerSub,
+        port: ControllerSub
     ): any {
-        return 0
+        return 0;
     }
 
     //% group="Button"
@@ -998,10 +1011,7 @@ namespace Input {
         module: string,
         port: Controller,
         brightness: number
-    ) {
-
-    }
-
+    ) { }
 
     //% group="Laser"
     //% blockId="input_laser_checkevent"
@@ -1057,10 +1067,7 @@ namespace Input {
     //% event.fieldEditor="gridpicker"
     //% event.fieldOptions.column=2
     //% blockHidden=true
-    export function PotSwichButton(
-        module: string,
-        port: Controller,
-    ): boolean {
+    export function PotSwichButton(module: string, port: Controller): boolean {
         return true;
     }
 
@@ -1079,12 +1086,10 @@ namespace Input {
     //% blockHidden=true
     export function input_potswitch_readpot(
         module: string,
-        port: Controller,
+        port: Controller
     ): any {
         return true;
     }
-
-
 
     //% group="Motion Sensor"
     //% blockId="input_motion_callback"
@@ -1096,7 +1101,7 @@ namespace Input {
     //% port.fieldOptions.width=220
     //% module.fieldEditor="label"
     //% module.defl="tag_motion"
-    //% event.fieldEditor="gridpicker"  
+    //% event.fieldEditor="gridpicker"
     //% weight=100
     export function input_motion_callback(
         module: string,
@@ -1212,7 +1217,10 @@ namespace Input {
     //% module.fieldEditor="label"
     //% module.defl="tag_light"
     //% event.fieldEditor="gridpicker"
-    export function input_light_readvalue(module: string, port: Controller): boolean {
+    export function input_light_readvalue(
+        module: string,
+        port: Controller
+    ): boolean {
         return true;
     }
     //% group="Light Sensor"
@@ -1225,7 +1233,27 @@ namespace Input {
     //% module.fieldEditor="label"
     //% module.defl="tag_light"
     //% event.fieldEditor="gridpicker"
-    export function input_light_readvalue_analog(module: string, port: Controller): any {
+    export function input_light_readvalue_analog(
+        module: string,
+        port: Controller
+    ): any {
+        return true;
+    }
+
+    //% group="Dust Sensor"
+    //% blockId="input_dust_readvalue_analog"
+    //% block="▣ $module $port read dust level"
+    //% block.loc.vi="▣ $module $port đo độ bụi môi trường"
+    //% port.fieldEditor="gridpicker"
+    //% port.fieldOptions.column=5
+    //% port.fieldOptions.width=220
+    //% module.fieldEditor="label"
+    //% module.defl="tag_dust"
+    //% event.fieldEditor="gridpicker"
+    export function input_dust_readvalue_analog(
+        module: string,
+        port: Controller
+    ): any {
         return true;
     }
 
@@ -1240,7 +1268,10 @@ namespace Input {
     //% module.fieldEditor="label"
     //% module.defl="tag_water"
     //% event.fieldEditor="gridpicker"
-    export function input_water_readvalue(module: string, port: Controller): boolean {
+    export function input_water_readvalue(
+        module: string,
+        port: Controller
+    ): boolean {
         return true;
     }
     //% group="Water Sensor"
@@ -1254,7 +1285,10 @@ namespace Input {
     //% module.fieldEditor="label"
     //% module.defl="tag_water"
     //% event.fieldEditor="gridpicker"
-    export function input_water_readvalue_analog(module: string, port: Controller): any {
+    export function input_water_readvalue_analog(
+        module: string,
+        port: Controller
+    ): any {
         return true;
     }
 
@@ -1269,7 +1303,10 @@ namespace Input {
     //% module.fieldEditor="label"
     //% module.defl="tag_flame"
     //% event.fieldEditor="gridpicker"
-    export function input_flame_readvalue(module: string, port: Controller): boolean {
+    export function input_flame_readvalue(
+        module: string,
+        port: Controller
+    ): boolean {
         return true;
     }
     //% group="Flame Sensor"
@@ -1283,7 +1320,10 @@ namespace Input {
     //% module.fieldEditor="label"
     //% module.defl="tag_flame"
     //% event.fieldEditor="gridpicker"
-    export function input_flame_readvalue_analog(module: string, port: Controller): any {
+    export function input_flame_readvalue_analog(
+        module: string,
+        port: Controller
+    ): any {
         return true;
     }
 
@@ -1298,7 +1338,10 @@ namespace Input {
     //% module.fieldEditor="label"
     //% module.defl="tag_temperature"
     //% event.fieldEditor="gridpicker"
-    export function input_temperature_read(module: string, port: Controller): any {
+    export function input_temperature_read(
+        module: string,
+        port: Controller
+    ): any {
         return true;
     }
 
@@ -1313,7 +1356,10 @@ namespace Input {
     //% module.fieldEditor="label"
     //% module.defl="tag_gas"
     //% event.fieldEditor="gridpicker"
-    export function input_gas_readvalue(module: string, port: Controller): boolean {
+    export function input_gas_readvalue(
+        module: string,
+        port: Controller
+    ): boolean {
         return true;
     }
     //% group="Gas Sensor"
@@ -1327,7 +1373,10 @@ namespace Input {
     //% module.fieldEditor="label"
     //% module.defl="tag_gas"
     //% event.fieldEditor="gridpicker"
-    export function input_gas_readvalue_analog(module: string, port: Controller): any {
+    export function input_gas_readvalue_analog(
+        module: string,
+        port: Controller
+    ): any {
         return true;
     }
 
@@ -1342,7 +1391,10 @@ namespace Input {
     //% module.fieldEditor="label"
     //% module.defl="tag_proximity"
     //% event.fieldEditor="gridpicker"
-    export function input_proximity_readvalue(module: string, port: ControllerSub): boolean {
+    export function input_proximity_readvalue(
+        module: string,
+        port: ControllerSub
+    ): boolean {
         return false;
     }
 
@@ -1357,7 +1409,10 @@ namespace Input {
     //% module.fieldEditor="label"
     //% module.defl="tag_slider"
     //% event.fieldEditor="gridpicker"
-    export function input_slider_readvalue(module: string, port: Controller): any {
+    export function input_slider_readvalue(
+        module: string,
+        port: Controller
+    ): any {
         return 0;
     }
 
@@ -1391,10 +1446,7 @@ namespace Input {
     //% module.fieldEditor="label"
     //% module.defl="tag_rfid"
     //% event.fieldEditor="gridpicker"
-    export function input_rfid_read(
-        module: string,
-        port: ControllerSub,
-    ): any {
+    export function input_rfid_read(module: string, port: ControllerSub): any {
         return 0;
     }
 
@@ -1411,7 +1463,7 @@ namespace Input {
     //% event.fieldEditor="gridpicker"
     export function input_rfid_check(
         module: string,
-        port: ControllerSub,
+        port: ControllerSub
     ): boolean {
         return false;
     }
@@ -1431,11 +1483,7 @@ namespace Input {
         module: string,
         port: ControllerSub,
         handler: () => void
-    ) {
-    }
-
-
-
+    ) { }
 
     //% group="Colour Sensor"
     //% blockId="input_colour_read"
@@ -1450,11 +1498,10 @@ namespace Input {
     //% event.fieldEditor="gridpicker"
     export function input_colour_read(
         module: string,
-        mode: ReadColourMode,
+        mode: ReadColourMode
     ): any {
         return 0;
     }
-
 }
 
 //% color="#f99205" weight=800 icon="\uf069" blockGap=6
@@ -2603,19 +2650,6 @@ namespace Bluetooth {
     export function grobot_ble_share(tag: string, ble: string) {
 
     }
-
-    //% group="Control"
-    //% block="$tag control GRobot %ble to do"
-    //% block.loc.vi="__________________________________"
-    //% handlerStatement
-    //% blockId="grobot_ble_control"
-    //% tag.fieldEditor="label"
-    //% tag.defl="tag_bluetooth_action"
-    //% ble.defl="1304"
-    //% blockHidden=true
-    export function grobot_ble_control(tag: string, ble: string, handler: () => void) {
-
-    }
     //% group="Control"
     //% block="$tag ask %ble about value of $query"
     //% block.loc.vi="__________________________________"
@@ -2677,6 +2711,15 @@ namespace GaraBlock {
     }
 
 }
+
+namespace logic {
+    //% block="section $section"
+    //% blockId="logic_section"
+    //% section.shadow="text"
+    //% handlerStatement
+    export function logic_section(section: string, handler: () => void) { }
+}
+
 
 //% color="#9966ff" weight=500 icon="\uf140" blockGap=12
 namespace AI {
@@ -2773,9 +2816,12 @@ namespace Cloud {
     //% wifi.defl="logo_wifi"
     //% inlineInputMode=inline
     //% blockHidden=true
-    export function cloud_join_group(wifi: string, tag: string, name: string, password: string) {
-
-    }
+    export function cloud_join_group(
+        wifi: string,
+        tag: string,
+        name: string,
+        password: string
+    ) { }
 
     //% blockHidden=true
     //% block="$channel"
@@ -2785,9 +2831,8 @@ namespace Cloud {
     //% channel.fieldOptions.width=220
     //% weight=8990
     export function cloud_channels(channel: GroupChannelList): string {
-        return ''
+        return "";
     }
-
 
     //% group="Group"
     //% block="$tag $wifi write $value to channel $channel of group $group"
@@ -2801,9 +2846,13 @@ namespace Cloud {
     //% wifi.fieldEditor="label"
     //% wifi.defl="logo_wifi"
     //% inlineInputMode=inline
-    export function cloud_write_channel(wifi: string, tag: string, value: any, channel: string, group: string) {
-
-    }
+    export function cloud_write_channel(
+        wifi: string,
+        tag: string,
+        value: any,
+        channel: string,
+        group: string
+    ) { }
 
     //% group="Group"
     //% block="$tag $wifi when receive message from $channel of group $group ► $message"
@@ -2816,12 +2865,13 @@ namespace Cloud {
     //% wifi.fieldEditor="label"
     //% wifi.defl="logo_wifi"
     //% weight=1000
-    export function cloud_event_channel(wifi: string, tag: string, channel: string, group: string, handler: (message: any) => void) {
-
-    }
-
-
-
+    export function cloud_event_channel(
+        wifi: string,
+        tag: string,
+        channel: string,
+        group: string,
+        handler: (message: any) => void
+    ) { }
 
     //% group="Google Sheet"
     //% block="$module %wifi add $cells to sheet $worksheet of speadsheet link $workbook"
@@ -2833,42 +2883,108 @@ namespace Cloud {
     //% wifi.fieldEditor="label"
     //% wifi.defl="logo_wifi"
     //% cells.shadow="lists_create_with"
-    export function sheet_add_line(wifi: string, module: string, cells: any, worksheet: string, workbook: string) {
+    export function sheet_add_line(
+        wifi: string,
+        module: string,
+        cells: any,
+        worksheet: string,
+        workbook: string
+    ) { }
 
-    }
-
-
-
-    //% block="$module $wifi when received message from $sender ► $message"
-    //% block.loc.vi="$module $wifi khi nhận tin nhắn từ $sender ► $message"
-    //% blockId="cloud_handle_messenger"
+    //% block="$module $wifi when received message from $sender"
+    //% blockId="chatbot_receive_message"
     //% draggableParameters
     //% module.fieldEditor="label"
-    //% module.defl="tag_messenger"
-    //% group="Messenger"
-    //% weight=1000
+    //% module.defl="tag_chatbot"
+    //% group="Chatbot"
+    //% weight=1001
     //% wifi.fieldEditor="label"
     //% wifi.defl="logo_wifi"
     //% sender.shadow="cloud_id_messenger"
-    export function cloud_handle_messenger(sender: string, wifi: string, module: string, handler: (sender: string, message: string) => void) {
+    //% blockHidden=true
+    export function chatbot_event(
+        sender: string,
+        wifi: string,
+        module: string,
+        handler: (sender: string) => void
+    ) { }
+
+
+    //% block="$module $wifi listen to message from $sender"
+    //% blockId="chatbot_listen_message"
+    //% module.fieldEditor="label"
+    //% module.defl="tag_chatbot"
+    //% group="Chatbot"
+    //% weight=1001
+    //% wifi.fieldEditor="label"
+    //% wifi.defl="logo_wifi"
+    //% sender.shadow="cloud_id_messenger"
+    export function chatbot_listen_message(wifi: string, module: string, sender: string) {
+
     }
 
-    //% block="$module $wifi send message $message to $sender"
+
+
+    //% block="$module receive message with intention of $intention"
+    //% blockId="chatbot_match_intention"
+    //% module.fieldEditor="label"
+    //% module.defl="tag_chatbot"
+    //% group="Chatbot"
+    //% weight=1000
+    //% wifi.fieldEditor="label"
+    //% wifi.defl="logo_wifi"
+    //% inlineInputMode=inline
+    export function chatbot_match_intention(intention: string, module: string): boolean {
+        return true;
+    }
+
+    //% block="$module $wifi if $message match with  keyword $keyword "
+    //% blockId="chatbot_match_keyword"
+    //% module.fieldEditor="label"
+    //% module.defl="tag_chatbot"
+    //% group="Chatbot"
+    //% weight=1000
+    //% wifi.fieldEditor="label"
+    //% wifi.defl="logo_wifi"
+    //% blockHidden
+    export function chatbot_match_keyword(
+        wifi: string,
+        module: string,
+        keyword: string
+    ): boolean {
+        return true;
+    }
+
+    //% block="$module $wifi run when: $condition"
+    //% blockId="chatbot_function"
+    //% module.fieldEditor="label"
+    //% module.defl="tag_chatbot_action"
+    //% wifi.defl="logo_wifi"
+    //% wifi.fieldEditor="label"
+    //% weight=1001
+    //% group="Chatbot"
+    //% condition.defl="run this when the room is too hot"
+    //% blockHidden
+    export function chatbot_function(
+        wifi: string,
+        module: string,
+        condition: string
+    ) { }
+
+    //% block="send message $message to $sender"
     //% block.loc.vi="$module $wifi gửi tin nhắn $message tới $sender"
-    //% blockId="cloud_send_messenger"
+    //% blockId="chatbot_send"
     //% draggableParameters
     //% module.fieldEditor="label"
-    //% module.defl="tag_messenger_action"
-    //% group="Messenger"
+    //% module.defl="tag_chatbot_action"
+    //% group="Chatbot"
     //% message.shadow="text"
     //% weight=999
     //% wifi.fieldEditor="label"
     //% wifi.defl="logo_wifi"
     //% inlineInputMode=inline
     //% sender.shadow="cloud_id_messenger"
-    export function cloud_send_messenger(wifi: string, module: string, message: any, sender: any) {
-
-    }
+    export function chatbot_send(message: any, sender: any) { }
 
     //% block="%module User %userid"
     //% blockId="cloud_id_messenger"
@@ -2878,9 +2994,8 @@ namespace Cloud {
     //% weight=999
     //% blockHidden=true
     export function cloud_id_messenger(module: string, userid: string): string {
-        return ''
+        return "";
     }
-
 
     //% block="$module $wifi every $date at $hour : $minute"
     //% block.loc.vi="$module $wifi mỗi $date lúc $hour : $minute"
@@ -2898,9 +3013,14 @@ namespace Cloud {
     //% hour.defl=6
     //% wifi.fieldEditor="label"
     //% wifi.defl="logo_wifi"
-    export function cloud_clock_event(wifi: string, module: string, date: DayOfWeek, hour: number, minute: number, handler: () => void) {
-
-    }
+    export function cloud_clock_event(
+        wifi: string,
+        module: string,
+        date: DayOfWeek,
+        hour: number,
+        minute: number,
+        handler: () => void
+    ) { }
 
     //% block="$module $wifi current $type"
     //% block.loc.vi="$module $wifi $type hiện tại"
@@ -2915,10 +3035,13 @@ namespace Cloud {
     //% weight=999
     //% wifi.fieldEditor="label"
     //% wifi.defl="logo_wifi"
-    export function cloud_clock_get(wifi: string, module: string, type: TimeType): any {
+    export function cloud_clock_get(
+        wifi: string,
+        module: string,
+        type: TimeType
+    ): any {
         return 0;
     }
-
 
     //% block="$module $wifi current time as $format"
     //% block.loc.vi="$module $wifi thời gian dưới dạng $format"
@@ -2930,16 +3053,13 @@ namespace Cloud {
     //% weight=999
     //% wifi.fieldEditor="label"
     //% wifi.defl="logo_wifi"
-    export function cloud_clock_format(wifi: string, module: string, format: string): string {
-        return '';
+    export function cloud_clock_format(
+        wifi: string,
+        module: string,
+        format: string
+    ): string {
+        return "";
     }
-
-
-
-
-
-
-
 
     // //% block="$icon $wifi trigger function $fname || with  $arg1 | $arg2 | $arg3| $arg4| $arg5| $arg6"
     // //% block.loc.vi="__________________________________"
@@ -2993,26 +3113,22 @@ namespace Cloud {
     //     return '""';
     // }
 
-
     //% block="$icon trigger topic $topic"
     //% block.loc.vi="$icon kích hoạt topic $topic"
     //% blockId="cloud_ifttt_write"
     //% group="If This Then That (IFTTT)"
     //% icon.fieldEditor="label"
     //% icon.defl="tag_ifttt_action"
-    export function cloud_ifttt_write(icon: string, topic: string) {
-
-    }
+    //% blockHidden
+    export function cloud_ifttt_write(icon: string, topic: string) { }
     //% block="$icon set key $key"
     //% block.loc.vi="$icon dùng mã key $key"
     //% blockId="cloud_ifttt_config"
     //% group="If This Then That (IFTTT)"
     //% icon.fieldEditor="label"
     //% icon.defl="tag_ifttt_action"
-    export function cloud_ifttt_config(icon: string, key: string) {
-
-    }
-    ``
+    export function cloud_ifttt_config(icon: string, key: string) { }
+    ``;
 
     //% block="%icon set key $key"
     //% block.loc.vi="%icon dùng mã key $key"
@@ -3020,11 +3136,8 @@ namespace Cloud {
     //% group="ThingSpeak"
     //% icon.fieldEditor="label"
     //% icon.defl="tag_thingspeak_action"
-    export function cloud_thinkspeak_config(icon: string, key: string) {
-
-    }
-
-
+    //% blockHidden
+    export function cloud_thinkspeak_config(icon: string, key: string) { }
 
     //% block="%icon update channel $channel"
     //% block.loc.vi="%icon cập nhật kênh $channel"
@@ -3032,9 +3145,12 @@ namespace Cloud {
     //% group="ThingSpeak"
     //% icon.fieldEditor="label"
     //% icon.defl="tag_thingspeak_action"
-    export function cloud_thinkspeak_update(icon: string, channel: string, value: any) {
-
-    }
+    //% blockHidden
+    export function cloud_thinkspeak_update(
+        icon: string,
+        channel: string,
+        value: any
+    ) { }
 
     //% block="$tag add wifi name $ssid with password $password"
     //% block="$tag kết nối wifi $ssid với mật khẩu $password"
@@ -3043,8 +3159,11 @@ namespace Cloud {
     //% tag.fieldEditor="label"
     //% tag.defl="tag_wifi_action"
     //% group="Wifi"
-    export function network_wifi_setconnect(tag: string, ssid: string, password: string) { }
-
+    export function network_wifi_setconnect(
+        tag: string,
+        ssid: string,
+        password: string
+    ) { }
 
     //% block="$tag is connected"
     //% block.loc.vi="__________________________________"
@@ -3053,7 +3172,7 @@ namespace Cloud {
     //% tag.defl="tag_wifi"
     //% group="Wifi"
     export function network_wifi_isconnected(tag: string): boolean {
-        return false
+        return false;
     }
 
     //% block="$tag connected wifi name"
@@ -3063,12 +3182,9 @@ namespace Cloud {
     //% tag.fieldEditor="label"
     //% tag.defl="tag_wifi"
     export function network_wifi_getssid(tag: string): string {
-        return ""
+        return "";
     }
-
 }
-
-
 
 //% color="#20bf6b" weight=1003 icon="\uf0c2"
 namespace loops {
@@ -3076,29 +3192,22 @@ namespace loops {
     //% block.loc.vi="__________________________________"
     //% blockId="wait_until"
     //% deprecated=true
-    export function wait_until(cond: boolean) {
-
-    }
+    export function wait_until(cond: boolean) { }
     //% block="run in parallel"
     //% block.loc.vi="__________________________________"
     //% handlerStatement
     //% blockId="run_in_background"
     //% blockHidden=true
-    export function run_in_background(handler: () => void) {
-
-    }
+    export function run_in_background(handler: () => void) { }
 
     //% blockId="pxt-on-start"
     //% blockHidden=true
-    export function pxt_on_start_shadow(handler: () => void) {
-
-    }
-
+    export function pxt_on_start_shadow(handler: () => void) { }
 }
 
 enum VariableLocation {
     Flash,
-    Cloud
+    Cloud,
 }
 
 //% color="#45aaf2" weight=1002 icon="\uf0c2"
@@ -3108,10 +3217,10 @@ namespace variables {
     //% block="set location of $variable to $type"
     //% block.loc.vi="__________________________________"
     //% blockId="variable_set_location"
-    export function varaible_set_location(variable: any, type: VariableLocation) {
-
-    }
-
+    export function varaible_set_location(
+        variable: any,
+        type: VariableLocation
+    ) { }
 }
 //% color="#a5eeaF" weight=1000 icon="\uf0c2"
 namespace Math { }
@@ -3204,16 +3313,13 @@ enum WheelType {
 
 //% color="#0a909f" weight=1000 icon="\uf013" blockGap=6
 namespace grobot {
-
     //% blockId="grobot_attach_encoder"
     //% block="Grobot: attach speedometer to %port"
     //% block.loc.vi = "Grobot: kết nối đo tốc độ bánh vào $port"
     //% advanced=true
     //% group="Settings"
     //% weight=10
-    export function grobot_attach_encoder(port: ControllerSub) {
-
-    }
+    export function grobot_attach_encoder(port: ControllerSub) { }
 
     //% blockId="grobot_select_wheel"
     //% block="GRobot: using %wheel"
@@ -3221,10 +3327,7 @@ namespace grobot {
     //% blockHidden=true
     //% group="Settings"
     //% weight=9
-    export function grobot_select_wheel(wheel: WheelType) {
-
-    }
-
+    export function grobot_select_wheel(wheel: WheelType) { }
 
     //% blockId="grobot_set_default_speed"
     //% block="GRobot: set speed %speed"
@@ -3232,9 +3335,7 @@ namespace grobot {
     //% group="Settings"
     //% speed.defl=50
     //% weight=8
-    export function grobot_set_default_speed(speed: number) {
-
-    }
+    export function grobot_set_default_speed(speed: number) { }
 
     //% blockId="grobot_set_speed_range"
     //% block="Config: set motor power from $min % to $max %"
@@ -3242,12 +3343,7 @@ namespace grobot {
     //% group="Config"
     //% min.defl="40"
     //% max.defl="100"
-    export function grobot_set_speed_range(min: number, max: number) {
-
-    }
-
-
-
+    export function grobot_set_speed_range(min: number, max: number) { }
 
     //% blockId="grobot_go_distance"
     //% block="GRobot: go %direction %dist cm"
@@ -3255,10 +3351,7 @@ namespace grobot {
     //% group="Control"
     //% weight=8
     //% dist.defl=10
-    export function grobot_go_distance(direction: Direction, dist: number) {
-
-    }
-
+    export function grobot_go_distance(direction: Direction, dist: number) { }
 
     //% blockId="grobot_rotate_angle"
     //% block="GRobot: rotate %angle degrees"
@@ -3266,21 +3359,12 @@ namespace grobot {
     //% angle.defl=90
     //% group="Control"
     //% weight=7
-    export function grobot_rotate_angle(angle: number) {
-
-    }
-
-
-
-
-
-
-
+    export function grobot_rotate_angle(angle: number) { }
 
     /**
-       * Get the frequency of a note.
-       * @param note the note name
-       */
+     * Get the frequency of a note.
+     * @param note the note name
+     */
     //% blockId=device_note block="$note"
     //% shim=TD_ID
     //% color="#ffffff" colorSecondary="#ffffff" colorTertiary="#D83B01"
@@ -3291,7 +3375,6 @@ namespace grobot {
     export function noteFrequency(note: Note): number {
         return note;
     }
-
 
     //% blockId="grobot_general_onstart"
     //% block="GRobot Program"
@@ -3306,32 +3389,23 @@ namespace grobot {
     //% blockId="grobot_set_mode"
     //% block="Config: Start your program on start"
     //% block.loc.vi="Cài đặt: khởi chạy chương trình khi khởi động"
-    export function grobot_set_mode() {
-
-    }
-
+    export function grobot_set_mode() { }
 
     //% blockId="grobot_calibrate"
     //% block="Config: Set motor calibration %calib"
     //% block.loc.vi="Cài đặt: cân chỉnh động cơ với giá trị $calib"
-    export function grobot_calibrate(calib: number) {
-
-    }
+    export function grobot_calibrate(calib: number) { }
     //% blockId="grobot_calibrate_state"
     //% block="Config: Turn calibration %state"
     //% state.shadow="toggleOnOff"
     //% blockHidden=true
 
-    export function grobot_calibrate_state(state: boolean) {
-
-    }
+    export function grobot_calibrate_state(state: boolean) { }
 
     //% blockId="grobot_set_programe"
     //% block="Config: Set this sketch to $program"
     //% block.loc.vi="Cài đặt: lưu code vào $program"
-    export function grobot_set_programe(program: Programe) {
-
-    }
+    export function grobot_set_programe(program: Programe) { }
 
     //% block="$tag Move forward at %power power"
     //% block.loc.vi="$tag Robot: ĐI THẲNG với tốc độ $power"
@@ -3351,7 +3425,11 @@ namespace grobot {
     //% tag.fieldEditor="label"
     //% tag.defl="tag_g2"
     //% power.defl=80
-    export function GRobot_Foward_ms(tag: string, power: number, time: number) { }
+    export function GRobot_Foward_ms(
+        tag: string,
+        power: number,
+        time: number
+    ) { }
 
     //% block="$tag Move backward at $power % power"
     //% block.loc.vi="$tag Robot: ĐI LÙI với tốc độ $power"
@@ -3391,8 +3469,6 @@ namespace grobot {
     //% tag.defl="tag_g6"
     //% power.defl=80
     export function GRobot_RotateLeft_(tag: string, power: number) { }
-
-
 
     //% block="$tag Rotate right at $power % power"
     //% block.loc.vi="$tag Robot: XOAY PHẢI với tốc độ $power"
@@ -3458,23 +3534,16 @@ namespace grobot {
     //% block="$tag Spin motor M1 at $power1 and M2 at $power2"
     //% block.loc.vi="$tag Robot: chạy hai động cơ M1 $power1 và M2 $power2"
     //% blockId="grobot_motor_both"
-    //% group="Buzzer"
+    //% group="Motor"
     //% weight=89
     //% state.shadow="toggleOnOff"
     //% tag.fieldEditor="label"
     //% tag.defl="tag_g12"
-    export function grobot_motor_both(tag: string, power1: number, power2: number) { }
-
-    // //% block="$tag Turn Buzzer $state for $time ms"
-    // //% blockId="grobot_set_buzzer"
-    // //% group="Buzzer"
-    // //% weight=89
-    // //% state.shadow="toggleOnOff"
-    // //% tag.fieldEditor="label"
-    // //% tag.defl="tag_g12"
-    // //% blockHidden=true
-    // //% time.shadow="timePicker_"
-    // export function grobot_set_buzzer(tag: string, state: boolean, time: number) { }
+    export function grobot_motor_both(
+        tag: string,
+        power1: number,
+        power2: number
+    ) { }
 
     //% block="$tag Button onboard is being pressed"
     //% block.loc.vi="$tag nút đang được nhấn"
@@ -3503,10 +3572,8 @@ namespace grobot {
     //% group="Line Sensor"
     //% weight=87
     export function ls_state_picker_(state: LineSensorState): boolean {
-        return false
+        return false;
     }
-
-
 
     //% block="$tag Follow Line 5 Channel: check if C1$c1 C2$c2 C3$c3 C4$c4"
     //% block.loc.vi="$tag Line 5: nếu C1$c1 C2$c2 C3$c3 C4$c4"
@@ -3531,8 +3598,6 @@ namespace grobot {
     ): boolean {
         return false;
     }
-
-
 
     // //% block="$tag Music: Song $song"
     // //% block.loc.vi="__________________________________"
@@ -3579,7 +3644,7 @@ namespace grobot {
     //% tag.defl="tag_g19"
     //% note.fieldEditor="note" note.defl="262"
     //% note.fieldOptions.decompileLiterals=true
-    //% useEnumVal=1  
+    //% useEnumVal=1
     export function PlayNote(tag: string, note: Note, time: number) { }
 
     //% block="$tag Music: Set beats per minute to $bpm"
@@ -3601,8 +3666,6 @@ namespace grobot {
     //% tag.fieldEditor="label"
     //% tag.defl="tag_g21"
     export function PlayMute(tag: string, beat: NoteLength) { }
-
-
 
     //% group="Pixel"
     //% blockId="grobot_pixel_setcolourall"
@@ -3641,7 +3704,6 @@ namespace grobot {
     //% weight=98
     export function grobot_pixel_setoff(module: string) { }
 
-
     //% group="Pixel"
     //% blockId="grobot_pixel_setwipe"
     //% block="$module Pixel: wipe colour %colour=colorNumberPicker at speed $speed (ms/LED)"
@@ -3657,8 +3719,6 @@ namespace grobot {
         speed: number
     ) { }
 
-
-
     //% group="Pixel"
     //% blockId="pixel_colour"
     //% block="R$r G$g B$b"
@@ -3668,12 +3728,8 @@ namespace grobot {
     //% b.min=0 b.max=255
     //% inlineInputMode=inline
     //% weight=96
-    export function pixel_colour(
-        r: number,
-        g: number,
-        b: number
-    ): any {
-        return '#000';
+    export function pixel_colour(r: number, g: number, b: number): any {
+        return "#000";
     }
 
     // //% group="Motion Sesor"
@@ -3694,11 +3750,8 @@ namespace grobot {
     //% block="current runtime in $type"
     //% block.loc.vi="thời gian hiện tại dưới dạng %type"
     export function current_ticksms(type: TimeUnit): any {
-        return 0
+        return 0;
     }
-
-
-
 
     //% group="Data storage"
     //% block="auto save $variable to $location"
@@ -3706,12 +3759,10 @@ namespace grobot {
     //% blockId="grobot_set_state_location"
     //% variable.shadow=variables_get
     //% blockNamespace=Variables
-    export function grobot_set_state_location(variable: any, location: VariableLocation) {
-
-    }
-
-
-
+    export function grobot_set_state_location(
+        variable: any,
+        location: VariableLocation
+    ) { }
 
     /*
       Line Following API
@@ -3728,31 +3779,24 @@ namespace grobot {
     //% block="Navigator: %action"
     //% blockId="navigator_noarg_action"
     //% colour=#4285f4
-    //% blockHidden=true
-    export function navigator_noarg_action(action: NavigatorAction) {
-
-    }
+    //% blockHidden=false
+    export function navigator_noarg_action(action: NavigatorAction) { }
 
     //% group="Navigator"
     //% block="Navigator: if %event"
     //% blockId="navigator_check_event"
     //% colour=#4285f4
-    //% blockHidden=true
+    //% blockHidden=false
     export function navigator_check_event(event: NavigatorEvent): boolean {
-        return false
+        return false;
     }
 
     //% group="Navigator"
     //% block="Navigator: set follow speed %speed"
     //% blockId="navigator_set_speed"
     //% colour=#4285f4
-    //% blockHidden=true
-    export function navigator_set_speed(speed: number) {
-
-    }
-
-
-
+    //% blockHidden=false
+    export function navigator_set_speed(speed: number) { }
 
     /*
       Extension via a port protocol
@@ -3765,12 +3809,11 @@ namespace grobot {
     //% block.loc.vi="▣ dùng module mở rộng ở cổng $port"
     //% handlerStatement
     //% blockId="grobot_extender_scoped"
-    //% advance=true 
-    export function grobot_extender_scoped(port: ControllerSub, handler: () => void) {
-
-    }
-
-
+    //% advance=true
+    export function grobot_extender_scoped(
+        port: ControllerSub,
+        handler: () => void
+    ) { }
 }
 
 enum NavigatorAction {
@@ -4021,3 +4064,16 @@ namespace App {
 //   return true;
 // }
 
+
+
+
+// //% block="$tag Turn Buzzer $state for $time ms"
+// //% blockId="grobot_set_buzzer"
+// //% group="Buzzer"
+// //% weight=89
+// //% state.shadow="toggleOnOff"
+// //% tag.fieldEditor="label"
+// //% tag.defl="tag_g12"
+// //% blockHidden=true
+// //% time.shadow="timePicker_"
+// export function grobot_set_buzzer(tag: string, state: boolean, time: number) { }

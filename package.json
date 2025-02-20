@@ -7,13 +7,8 @@
         "education",
         "MakeCode"
     ],
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/microsoft/pxt-arcade.git"
-    },
     "author": "",
     "license": "MIT",
-    "homepage": "https://github.com/microsoft/pxt-arcade#readme",
     "files": [
         "README.md",
         "pxtarget.json",
@@ -31,17 +26,19 @@
         "typescript": "4.8.3"
     },
     "dependencies": {
+        "pxt": "*",
+        "pxt-common-packages": "*",
         "@types/ws": "^8.5.4",
-        "pxt": "^0.5.1",
-        "pxt-common-packages": "11.1.2",
+        "csstype": "^3.1.3",
         "pxt-core": "9.3.7"
     },
     "optionalDependencies": {
-        "pxt-arcade-sim": "microsoft/pxt-arcade-sim.git#v0.11.10"
     },
     "scripts": {
         "serve": "node node_modules/pxt-core/built/pxt.js serve",
         "copy-sim": "node ./scripts/copyArcadeSim.js",
-        "relink": "npm link ../pxt && npm link ../pxt-common-packages && cd ../pxt-common-packages && npm link ../pxt"
+        "relink": "npm link ../pxt && npm link ../pxt-common-packages && cd ../pxt-common-packages && npm link ../pxt",
+        "link": "npm link ../pxt ../pxt-common-packages",
+        "build": "npm run link && export PXT_FORCE_LOCAL=1 PXT_NODOCKER=1 && ../pxt/pxt-cli/pxt staticpkg --local && wget -O apps/pxt-arcade/built/packaged/simulator.html https://trg-arcade.userpxt.io/---simulator"
     }
 }
