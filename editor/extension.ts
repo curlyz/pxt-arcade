@@ -1,25 +1,4 @@
-/// <reference path="../node_modules/pxt-core/built/pxteditor.d.ts" />
-
-/*
-  editorToolbar_tsx.setState({
-    textButton: "Press to connect",
-    colorButton: "orange"
-  })
-
-  editorToolbar_tsx.setState({
-    textButton: "Upload to GRobot",
-    colorButton: "black"
-  })
-
-
-  editorToolbar_tsx.setState({
-    textButton: "Upload to G-IoT",
-    colorButton: "pink"
-  })
-
-
-*/
-
+/// <reference path="../node_modules/pxt-core/localtypings/pxteditor.d.ts" />
 
 namespace pxt.editor {
     if (true) {
@@ -52,9 +31,16 @@ namespace pxt.editor {
                     statementsRoot.querySelectorAll("block[type=variables_get]")
                 );
 
-                paramValues.forEach((value) => {
-                    let oldVariableName = "";
-                    const connectedVarBlock = getChildBlock(value, "variables_get");
+            paramValues.forEach(value => {
+                let oldVariableName = "";
+
+                const handlerVarShadow = getShadow(value, "variables_get_reporter");
+
+                if (!handlerVarShadow) {
+                    return;
+                }
+
+                const connectedVarBlock = getChildBlock(value, "variables_get");
 
                     if (connectedVarBlock) {
                         // A variable is connected to the shadow variable reporter; use the name for
@@ -64,11 +50,10 @@ namespace pxt.editor {
                         value.removeChild(connectedVarBlock);
                     }
 
-                    const handlerVarShadow = getShadow(value, "variables_get_reporter");
-                    const handlerVarField = getField(handlerVarShadow, "VAR");
-                    const argReporterName = handlerVarField.textContent;
-                    oldVariableName = oldVariableName || argReporterName;
-                    changeVariableToSpriteReporter(handlerVarShadow, argReporterName);
+                const handlerVarField = getField(handlerVarShadow, "VAR");
+                const argReporterName = handlerVarField.textContent;
+                oldVariableName = oldVariableName || argReporterName;
+                changeVariableToSpriteReporter(handlerVarShadow, argReporterName);
 
                     // Change all references to this variable inside the handler to argument reporters
                     usedVariables.forEach((usedVarBlock) => {
@@ -229,44 +214,113 @@ namespace pxt.editor {
                 );
             }
 
-            if (pxt.semver.strcmp(pkgTargetVersion || "0.0.0", "0.18.9") < 0) {
-                /**
-                       * move from tilemap namespace to tiles namespace
-                       * <block type="tilemap_locationXY">
-                              <field name="xy">tilemap.XY.column</field>
-                              <value name="location">
-                                  <block type="variables_get">
-                                      <field name="VAR" id="L%xa3_Yy]Kq+]Q|yE{Fv">location</field>
-                                  </block>
-                              </value>
-                          </block>
-                       */
-                U.toArray(dom.querySelectorAll("block[type=tilemap_locationXY]")).forEach(
-                    (block) => {
-                        const xyField = getField(block, "xy");
-                        xyField.textContent = (xyField.textContent || "").replace(
-                            /^tilemap./,
-                            "tiles."
-                        );
-                    }
-                );
+            /**
+             * move from tilemap namespace to tiles namespace
+             * <block type="tilemap_locationXY">
+                    <field name="xy">tilemap.XY.column</field>
+                    <value name="location">
+                        <block type="variables_get">
+                            <field name="VAR" id="L%xa3_Yy]Kq+]Q|yE{Fv">location</field>
+                        </block>
+                    </value>
+                </block>
+             */
+            U.toArray(dom.querySelectorAll("block[type=tilemap_locationXY]")).forEach(block => {
+                const xyField = getField(block, "xy");
+                xyField.textContent = (xyField.textContent || "").replace(/^tilemap./, "tiles.");
+            });
+        }
+
+        if (pxt.semver.strcmp(pkgTargetVersion || "0.0.0", "1.12.34") < 0) {
+            const lang = pxt.BrowserUtils.getCookieLang();
+            if (lang == "es-MX") {
+                // on player 2 a button pressed
+                pxt.U.toArray(dom.querySelectorAll("block[type=ctrlonbuttonevent]"))
+                .forEach(eventRoot => {
+                    swapFieldIfNotMatching(eventRoot, "button", "controller", "ControllerButton.");
+                });
+            } else if (lang === "es-ES") {
+                pxt.U.toArray(dom.querySelectorAll("[type=music_sounds]>field[name=note]"))
+                    .forEach(node => node.setAttribute("name", "name"));
+                // on a button pressed
+                pxt.U.toArray(dom.querySelectorAll("block[type=keyonevent]"))
+                    .forEach(eventRoot => {
+                        swapFieldIfNotMatching(eventRoot, "event", "button", "ControllerButtonEvent.");
+                    });
+                // on player 2 a button pressed
+                pxt.U.toArray(dom.querySelectorAll("block[type=ctrlonbuttonevent]"))
+                    .forEach(eventRoot => {
+                        swapFieldIfNotMatching(eventRoot, "button", "controller", "ControllerButton.");
+                    });
+            } else if (lang === "de") {
+                pxt.U.toArray(dom.querySelectorAll("block[type=image_create]>value[name=heNacht]"))
+                    .forEach(node => node.setAttribute("name", "height"));
             }
         }
 
-        function changeVariableToSpriteReporter(
-            varBlockOrShadow: Element,
-            reporterName: string
-        ) {
-            const varField = getField(varBlockOrShadow, "VAR");
-            varBlockOrShadow.setAttribute("type", "argument_reporter_custom");
-            varField.setAttribute("name", "VALUE");
-            varField.textContent = reporterName;
-            varField.removeAttribute("variabletype");
-            varField.removeAttribute("id");
-            const mutation = varBlockOrShadow.ownerDocument.createElement("mutation");
-            mutation.setAttribute("typename", "Sprite");
-            varBlockOrShadow.insertBefore(mutation, varBlockOrShadow.firstChild);
+        if (pxt.semver.strcmp(pkgTargetVersion || "0.0.0", "1.0.0") < 0) {
+            // At some point Sprite.z switched from being a getter/setter to a property
+            pxt.U.toArray(dom.querySelectorAll("block[type=Sprite_blockCombine_set]>field[name=property]"))
+                .forEach(node => {
+                    if (node.textContent.trim() === "Sprite.z@set") {
+                        node.textContent = "Sprite.z";
+                    }
+                });
+
+
+            // The kind field used by the legacy animation editor switched to including the numerical
+            // enum value in the field (e.g. Walking -> 0Walking)
+            const actionKinds = pxt.U.toArray(dom.querySelectorAll("variable[type=ActionKind]"));
+
+            if (actionKinds.length) {
+                pxt.U.toArray(dom.querySelectorAll("block[type=action_enum_shim]>field[name=MEMBER]"))
+                    .concat(pxt.U.toArray(dom.querySelectorAll("shadow[type=action_enum_shim]>field[name=MEMBER]")))
+                    .forEach(node => {
+                        const value = node.textContent;
+                        if (!/^\d/.test(value)) {
+                            // The correct numerical value will be in the variables
+                            for (const kind of actionKinds) {
+                                const match = /^\d+(.*)/.exec(kind.textContent);
+                                if (match?.[1] === value) {
+                                    node.textContent = kind.textContent;
+                                    break;
+                                }
+                            }
+                        }
+                    });
+            }
         }
+    }
+
+    function swapFieldIfNotMatching(
+        eventRoot: Element,
+        fieldAName: string,
+        fieldBName: string,
+        fieldAShouldStartWith: string
+    ) {
+        const fieldA = eventRoot.querySelector(`field[name=${fieldAName}]`);
+        const fieldB = eventRoot.querySelector(`field[name=${fieldBName}]`);
+        if (!fieldB || !fieldA) return;
+        if (!fieldA.innerHTML.startsWith(fieldAShouldStartWith)
+                && fieldB.innerHTML.startsWith(fieldAShouldStartWith)) {
+            // swapped by invalid translation we now catch; swap back
+            fieldA.setAttribute("name", fieldBName);
+            fieldB.setAttribute("name", fieldAName);
+        }
+    }
+
+
+    function changeVariableToSpriteReporter(varBlockOrShadow: Element, reporterName: string) {
+        const varField = getField(varBlockOrShadow, "VAR");
+        varBlockOrShadow.setAttribute("type", "argument_reporter_custom");
+        varField.setAttribute("name", "VALUE");
+        varField.textContent = reporterName;
+        varField.removeAttribute("variabletype");
+        varField.removeAttribute("id");
+        const mutation = varBlockOrShadow.ownerDocument.createElement("mutation");
+        mutation.setAttribute("typename", "Sprite");
+        varBlockOrShadow.insertBefore(mutation, varBlockOrShadow.firstChild);
+    }
 
         function getField(parent: Element, name: string) {
             return getChildNode(parent, "field", "name", name);

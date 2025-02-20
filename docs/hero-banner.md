@@ -1,6 +1,6 @@
 # Hero Banner
 
-Here are some cool activities to get you started with your @boardname@!
+Here are some cool activities to get you started!
 
 ## Intro Content
 
@@ -9,24 +9,30 @@ Here are some cool activities to get you started with your @boardname@!
 * buttonLabel: Start Coding
 * description: New? Start here!
 * imageUrl: /static/hero-gallery/skillmap.png
-* url: https://arcade.makecode.com/#tutorial:/tutorials/intro
+* url: /tutorials/intro
+* cardType: tutorial
+---
+* name: Educator Resources
+* buttonLabel: Visit
+* description: Educator Resources
+* imageUrl: /static/educator/edu.jpg
+* url: /educators
 * cardType: link
 ---
-* name: Save the Turkeys!
+* name: Snack Chase (Junior)
 * buttonLabel: Code Now
-* description: Create an amazing game to share!
-* imageUrl: /static/hero-gallery/turkey.png
-* url: https://arcade.makecode.com/--skillmap#turkey
-* cardType: link
+* description: Snack Chase (Junior)
+* imageUrl: /static/hero-gallery/lyla-hero.jpg
+* url: /tutorials/lyla-jr
+* cardType: tutorial
 ---
-* name: How To Code a Video Game
-* imageUrl: /static/hero-gallery/how-to-code.png
-* youTubePlaylistId: PLMMBk9hE-SepfPK6z19t6aAfwbOQNY6K7
----
-* name: Join the Live Stream
-* buttonLabel: Watch Stream
-* imageUrl: /static/hero-gallery/stream.png
-* url: https://www.twitch.tv/msmakecode
-* cardType: link
+* name: Build a Bubble Popping Game
+* buttonLabel: Code Now
+* description: Build a Bubble Popping Game
+* imageUrl: /static/hero-gallery/io2_hero.jpg
+* url: /tutorials/bubbles
+* cardType: tutorial
+
+
 
 ### ~

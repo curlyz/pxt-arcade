@@ -131,6 +131,18 @@
             },
             "code-ninjas-home-office/arctic-code-quest": {
                 "tutorial" : true
+            },
+            "code-ninjas-home-office/game-building-session-tutorials-2024": {
+                "tutorial" : true
+            },
+            "code-ninjas-home-office/game-building-session-yb-ob": {
+                "tutorial" : true
+            },
+            "code-ninjas-home-office/scott-kelly-games": {
+                "tutorial" : true
+            },
+            "code-ninjas-home-office/camps": {
+                "tutorial" : true
             }
         },
         "builtinExtensionsLib": {
@@ -338,8 +350,8 @@
             "variant": "hw---samd51"
         },
         {
-            "name": "micro:bit Newbit Shield",
-            "description": "Use the micro:bit with an expansion board from Kittenbot",
+            "name": "Newbit Arcade Shield",
+            "description": "Use the micro:bit with an expansion board from KittenBot",
             "imageUrl": "/static/hardware/newbit.png",
             "url": "https://www.kittenbot.cc/products/newbit-arcade-shield",
             "variant": "hw---n3"
@@ -356,6 +368,13 @@
             "description": "Use the micro:bit with an expansion board from iCShop",
             "imageUrl": "/static/hardware/bit-shield.png",
             "url": "https://www.icshop.com.tw/products/368112100137?locale=en",
+            "variant": "hw---n3"
+        },
+        {
+            "name": "Kitronik Arcade for micro:bit",
+            "description": "Use the micro:bit with an expansion board from Kitronik",
+            "imageUrl": "/static/hardware/kitronik-shield.png",
+            "url": "https://kitronik.co.uk/56116",
             "variant": "hw---n3"
         }
     ],
@@ -402,6 +421,12 @@
                 "id": "60307-91678-81892-80686",
                 "name": "Pigeon: Deliverance",
                 "description": "Fly through the dangerous rooftops and ledges of New York City delivering messages!",
+                "highScoreMode": "None"
+            },
+            {
+                "id": "12407-17885-37645-48510",
+                "name": "Rhombus Rush!",
+                "description": "Test your skills in this fast-paced game of reflexes and timing! Levels designed by members of the MakeCode Forum!",
                 "highScoreMode": "None"
             },
             {

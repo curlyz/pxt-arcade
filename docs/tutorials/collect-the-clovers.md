@@ -23,7 +23,7 @@ Start by setting the scene.
 
 - :tree: Open the ``||scene:Scene||`` category and drag
 ```block
-scene.setBackgroundImage(img`.`)
+scene.setBackgroundImage(assets.image`background`)
 ```
 into the ``||loops(noclick):on start||``<br/>
 container that's already in the workspace.
@@ -46,7 +46,7 @@ hint~
 
 ```blocks
 //@highlight
-scene.setBackgroundImage(img`.`)
+scene.setBackgroundImage(assets.image`background`)
 ```
 
 
@@ -60,11 +60,11 @@ scene.setBackgroundImage(img`.`)
 ---
 
 
-- :mouse pointer: Click the grey box inside<br/>
+- :mouse pointer: Click the image inside<br/>
 ```block
-scene.setBackgroundImage(img`.`)
+scene.setBackgroundImage(assets.image`background`)
 ```
-to open the image editor.
+to change the scene.
 
 
 - :paint brush: Draw a nice grassy background, or choose an image from the **gallery**.
@@ -99,12 +99,12 @@ Do you want a rabbit? A princess? A warrior?
 
 - :paper plane: From ``||sprites: Sprites||``, drag
 ```block
-let hero = sprites.create(img`.`, SpriteKind.Player)
+let hero = sprites.create(assets.image`hero`, SpriteKind.Player)
 ```
 into **the end** of the ``||loops(noclick): on start||`` container.
 
 
-- :paint brush: Click the empty grey box and switch to the **gallery** to
+- :paint brush: Click the bunny image and switch to the **gallery** to
  select a character for your project.
 
 
@@ -235,10 +235,9 @@ and drag it into the empty ``||game(noclick):on game update [5000]ms||`` contain
 
 
 ```blocks
-let projectile: Sprite = null
 game.onUpdateInterval(5000, function () {
     //@highlight
-    clover = sprites.createProjectileFromSide(assets.image`collect`, 50, 50)
+    let clover = sprites.createProjectileFromSide(assets.image`collect`, 50, 50)
 })
 ```
 
@@ -268,7 +267,7 @@ block.
 
 **Random** numbers are numbers that don't appear to have a predictable pattern. Using our `random` block, you'll be given a number between the minimum and maximum that you set, but you won't know which number will be chosen beforehand.
 
-This number is rechosen every time the block runs, and each time you may randomly end up with a number that is either the same or different than the last.
+This number is chosen again every time the block runs, and each time you may randomly end up with a number that is either the same or different than the last.
 
 hint~
 
@@ -596,25 +595,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, ot
     info.changeScoreBy(1)
 })
 ```
-
-## {Step 20 - Add Overlaps behavior for Bee @fullscreen}
-
-**We need an overlap behavior for the bee**
-
-- :mouse pointer: Right-click on the the<br/>
-``||sprites(noclick):on sprite overlaps||`` <br/>
-container that's already in your workspace.
-```blocks
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
-    otherSprite.destroy(effects.confetti, 100)
-    music.baDing.play()
-    info.changeScoreBy(1)
-})
-```
-and choose **duplicate**.
-
-_Don’t worry if it looks disabled, we’ll fix that._
-
 
 ## {Step 20 - Add Overlaps behavior for Bee @fullscreen}
 
